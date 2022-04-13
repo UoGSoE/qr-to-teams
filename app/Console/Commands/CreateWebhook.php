@@ -48,19 +48,7 @@ class CreateWebhook extends Command
             return 1;
         }
 
-        if ($default) {
-            Webhook::where('is_default', true)->update(['is_default' => false]);
-        }
-
-        $webhook = Webhook::create([
-            'name' => $name,
-            'url' => $url,
-            'is_default' => $default,
-            'shortcode' => Str::random(64),
-        ]);
-        $webhook->update([
-            'shortcode' => Webhook::generateShortcode($webhook->id)
-        ]);
+        $webhook = Webhook::createNew($url, $name, $default);
 
         $this->info('Webhook created - shortcode is '.$webhook->shortcode);
 

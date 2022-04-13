@@ -24,7 +24,7 @@ services:
       CONTAINER_ROLE: app
       <<: *default-env
     ports:
-      - "${APP_PORT:-3000}:80"
+      - "${APP_PORT:-4444}:80"
     build:
       context: .
       target: dev

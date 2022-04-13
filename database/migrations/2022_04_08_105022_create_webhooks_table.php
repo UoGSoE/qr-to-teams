@@ -18,6 +18,7 @@ return new class () extends Migration {
             $table->string('name');
             $table->string('shortcode')->unique();
             $table->boolean('is_default')->default(false);
+            $table->unsignedBigInteger('called_count')->default(0);
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Webhook;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,8 @@ class WebhookFactory extends Factory
         return [
             'url' => $this->faker->url,
             'name' => $this->faker->name,
-            'shortcode' => $this->faker->uuid,
+            'shortcode' => Webhook::generateShortcode(rand(1, 1000000)),
+            'called_count' => rand(1, 50),
         ];
     }
 }

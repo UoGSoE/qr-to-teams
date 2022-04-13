@@ -12,7 +12,10 @@
         "laravel/horizon": "^5.9",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
+        "livewire/livewire": "^2.10",
         "ohffs/laravel-msteams-alerts": "1.1.1",
+        "simplesoftwareio/simple-qrcode": "~4",
+        "uogsoe/ldap-laravel": "^3.0",
         "vinkla/hashids": "^10.0"
     },
     "require-dev": {

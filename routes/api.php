@@ -14,4 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/help', [\App\Http\Controllers\OutgoingWebhookController::class, 'store'])->name('api.help');
+// Note - this uses the throttle middleware to limit the number of requests to 10 per minute (based on incoming IP).
+Route::get('/help', [\App\Http\Controllers\OutgoingWebhookController::class, 'store'])->name('api.help')->middleware('throttle:10,1');

@@ -12,8 +12,10 @@ class OutgoingWebhookController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'text' => 'required',
+            'text' => 'required_without:btext',
+            'btext' => 'required_without:text',
         ]);
+
         if ($validator->fails()) {
             return response()->view('message', [
                 'message' => 'No message specified - no notification sent.',
@@ -37,7 +39,9 @@ class OutgoingWebhookController extends Controller
             ], 422);
         }
 
-        MSTeamsAlert::to($webhook->url)->message($request->text);
+        MSTeamsAlert::to($webhook->url)->message($request->text ?? base64_decode($request->btext));
+
+        $webhook->registerCalled();
 
         return response()->view('message', [
             'message' => 'Notification sent.',
