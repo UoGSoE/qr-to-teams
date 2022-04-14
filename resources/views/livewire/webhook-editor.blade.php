@@ -64,7 +64,13 @@
                     </div>
                 </div>
                 </h4>
-                <p class="subtitle"><code>{{ $newUrl }}</code></p>
+                <p class="subtitle">
+                    <div class="field">
+                        <div class="control">
+                            <input type="text" class="input" name="new_url_webhook" value="{{ $newUrl }}">
+                        </div>
+                    </div>
+                </p>
             @endif
         </div>
     @endif
