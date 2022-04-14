@@ -14,20 +14,6 @@ class ApiTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function an_incoming_request_is_resent_as_an_ms_teams_webhook_post()
-    {
-        Bus::fake();
-        $webhook = Webhook::factory()->create(['url' => 'https://example.com/webhook/1234']);
-
-        $response = $this->get('/api/help?text=test&c=' . $webhook->shortcode);
-
-        $response->assertOk();
-        Bus::assertDispatched(SendToMSTeamsChannelJob::class, function ($job) use ($webhook) {
-            return $job->webhookUrl === $webhook->url && $job->text === 'test';
-        });
-    }
-
-    /** @test */
     public function an_incoming_request_with_base64_encoded_text_is_resent_as_an_ms_teams_webhook_post()
     {
         Bus::fake();
@@ -36,9 +22,24 @@ class ApiTest extends TestCase
 
         $response = $this->get('/api/help?btext=' . $base64Text . '&c=' . $webhook->shortcode);
 
-        $response->assertOk();
+        $response->assertRedirect(route('message') . '?message=' . base64_encode('Notification sent.'));
         Bus::assertDispatched(SendToMSTeamsChannelJob::class, function ($job) use ($webhook) {
             return $job->webhookUrl === $webhook->url && $job->text === 'test base64';
+        });
+    }
+
+    /** @test */
+    public function an_incoming_request_with_encrypted_text_is_resent_as_an_ms_teams_webhook_post()
+    {
+        Bus::fake();
+        $encryptedText = encrypt('test encrypted');
+        $webhook = Webhook::factory()->create(['url' => 'https://example.com/webhook/1234']);
+
+        $response = $this->get('/api/help?etext=' . $encryptedText . '&c=' . $webhook->shortcode);
+
+        $response->assertRedirect(route('message') . '?message=' . base64_encode('Notification sent.'));
+        Bus::assertDispatched(SendToMSTeamsChannelJob::class, function ($job) use ($webhook) {
+            return $job->webhookUrl === $webhook->url && $job->text === 'test encrypted';
         });
     }
 
@@ -49,9 +50,9 @@ class ApiTest extends TestCase
         $webhook1 = Webhook::factory()->create(['url' => 'https://example.com/webhook/1234', 'is_default' => false]);
         $webhook2 = Webhook::factory()->create(['url' => 'https://example.com/webhook/5678', 'is_default' => true]);
 
-        $response = $this->get('/api/help?text=test');
+        $response = $this->get('/api/help?btext=' . base64_encode('test'));
 
-        $response->assertOk();
+        $response->assertRedirect(route('message') . '?message=' . base64_encode('Notification sent.'));
         Bus::assertDispatched(SendToMSTeamsChannelJob::class, function ($job) use ($webhook2) {
             return $job->webhookUrl === $webhook2->url && $job->text === 'test';
         });
@@ -66,18 +67,18 @@ class ApiTest extends TestCase
 
         $this->assertEquals(0, $webhook->fresh()->called_count);
 
-        $response = $this->get('/api/help?text=test&c=' . $webhook->shortcode);
+        $response = $this->get('/api/help?btext=' . base64_encode('test') . '&c=' . $webhook->shortcode);
 
-        $response->assertOk();
+        $response->assertRedirect(route('message') . '?message=' . base64_encode('Notification sent.'));
         Bus::assertDispatched(SendToMSTeamsChannelJob::class, function ($job) use ($webhook) {
             return $job->webhookUrl === $webhook->url && $job->text === 'test';
         });
         $this->assertEquals(now()->format('Y-m-d'), $webhook->fresh()->updated_at->format('Y-m-d'));
         $this->assertEquals(1, $webhook->fresh()->called_count);
 
-        $response = $this->get('/api/help?text=test&c=' . $webhook->shortcode);
+        $response = $this->get('/api/help?btext=' . base64_encode('test') . '&c=' . $webhook->shortcode);
 
-        $response->assertOk();
+        $response->assertRedirect(route('message') . '?message=' . base64_encode('Notification sent.'));
         Bus::assertDispatched(SendToMSTeamsChannelJob::class, function ($job) use ($webhook) {
             return $job->webhookUrl === $webhook->url && $job->text === 'test';
         });
@@ -92,8 +93,7 @@ class ApiTest extends TestCase
 
         $response = $this->get('/api/help?sdfsdfsfd');
 
-        $response->assertStatus(422);
-        $response->assertSee('No message specified - no notification sent');
+        $response->assertRedirect(route('message') . '?message=' . urlencode(base64_encode('No message specified - no notification sent.')));
         Bus::assertNotDispatched(SendToMSTeamsChannelJob::class);
     }
 
@@ -104,8 +104,7 @@ class ApiTest extends TestCase
 
         $response = $this->get('/api/help?text=sdfsdfsfd?c=blah');
 
-        $response->assertStatus(422);
-        $response->assertSee('Invalid channel - no notification sent');
+        $response->assertRedirect(route('message') . '?message=' . urlencode(base64_encode('Invalid channel - no notification sent.')));
         Bus::assertNotDispatched(SendToMSTeamsChannelJob::class);
     }
 }

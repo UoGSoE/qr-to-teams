@@ -16,6 +16,10 @@ class WebhookEditor extends Component
     public $newUrl = '';
     public $svgData = '';
     public $createUrlShortcode = '';
+    public $newWebhookUrl = '';
+    public $newWebhookName = '';
+    public $newWebhookDefault = false;
+    public $showCreateForm = false;
 
     protected $rules = [
         'url' => 'required|url',
@@ -33,12 +37,31 @@ class WebhookEditor extends Component
     public function updatedCreateUrlShortcode()
     {
         $this->newMessage = '';
-        $this->newUrl = route('api.help') . '?c=' . $this->createUrlShortcode . '&btext=' . base64_encode($this->newMessage);
+        $this->newUrl = $this->generateWebhookUrl();
     }
 
     public function updatedNewMessage($value)
     {
-        $this->newUrl = route('api.help') . '?c=' . $this->createUrlShortcode . '&btext=' . base64_encode($this->newMessage);
+        $this->newUrl = $this->generateWebhookUrl();
+    }
+
+    protected function generateWebhookUrl(): string
+    {
+        $maxUrlLength = 2000;
+        $url = route('api.help') . '?c=' . $this->createUrlShortcode . '&etext=' . encrypt($this->newMessage);
+        if (strlen($url) > $maxUrlLength) {
+            $url = route('api.help') . '?c=' . $this->createUrlShortcode . '&btext=' . base64_encode($this->newMessage);
+        }
+        if (strlen($url) > $maxUrlLength) {
+            $url = route('api.help') . '?c=' . $this->createUrlShortcode . '&text=' . urlencode($this->newMessage);
+        }
+        if (strlen($url) > $maxUrlLength) {
+            return 'The URL will be too long';
+        }
+
+        $this->resetValidation('url_length');
+
+        return $url;
     }
 
     public function addWebhook()
@@ -67,5 +90,18 @@ class WebhookEditor extends Component
         return response()->streamDownload(function () {
             echo QrCode::size(1024)->generate($this->newUrl);
         }, Str::snake($this->createUrlShortcode . $this->newMessage) . '.svg');
+    }
+
+    public function createWebhook()
+    {
+        $this->validate([
+            'newWebhookUrl' => 'required|url',
+            'newWebhookName' => 'required|string|max:255|unique:webhooks,name',
+            'newWebhookDefault' => 'required|boolean',
+        ]);
+
+        Webhook::createNew($this->newWebhookUrl, $this->newWebhookName, $this->newWebhookDefault);
+
+        $this->reset();
     }
 }

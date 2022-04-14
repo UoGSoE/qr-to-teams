@@ -12,39 +12,59 @@ class OutgoingWebhookController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'text' => 'required_without:btext',
-            'btext' => 'required_without:text',
+            'btext' => 'required_without_all:text,etext',
+            'etext' => 'required_without_all:text,btext',
         ]);
 
         if ($validator->fails()) {
-            return response()->view('message', [
-                'message' => 'No message specified - no notification sent.',
-            ], 422);
+            return redirect()->route('message', [
+                'message' => base64_encode('No message specified - no notification sent.'),
+            ]);
         }
 
         $validator = Validator::make($request->all(), [
             'c' => 'sometimes|required|string|exists:webhooks,shortcode',
         ]);
         if ($validator->fails()) {
-            return response()->view('message', [
-                'message' => 'Invalid channel - no notification sent.',
-            ], 422);
+            return redirect()->route('message', [
+                'message' => base64_encode('Invalid channel - no notification sent.'),
+            ]);
         }
 
         $webhook = $request->c ? Webhook::where('shortcode', $request->c)->first() : Webhook::where('is_default', true)->first();
 
         if (! $webhook) {
-            return response()->view('message', [
-                'message' => 'Invalid channel - no notification sent.',
-            ], 422);
+            return redirect()->route('message', [
+                'message' => base64_encode('Invalid channel - no notification sent.'),
+            ]);
         }
 
-        MSTeamsAlert::to($webhook->url)->message($request->text ?? base64_decode($request->btext));
+        $message = '';
+        if ($request->filled('btext')) {
+            $message = base64_decode($request->btext);
+        }
+        if ($request->filled('etext')) {
+            try {
+                $message = decrypt($request->etext);
+            } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+                return redirect()->route('message', [
+                    'message' => base64_encode('Invalid message - no notification sent.'),
+                ]);
+            }
+        }
+
+        if (! $message) {
+            return redirect()->route('message', [
+                'message' => base64_encode('No message specified - no notification sent.'),
+            ]);
+        }
+
+        MSTeamsAlert::to($webhook->url)->message($message);
 
         $webhook->registerCalled();
 
-        return response()->view('message', [
-            'message' => 'Notification sent.',
+        return redirect()->route('message', [
+            'message' => base64_encode('Notification sent.'),
         ]);
     }
 }
