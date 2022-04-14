@@ -21,7 +21,12 @@
             <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex items-center pt-8 sm:justify-start sm:pt-0">
                     <div class="ml-4 text-lg text-gray-500 uppercase tracking-wider">
-                        {{ $message }}
+                        @if ($message)
+                            {{ $message }}
+                        @else
+                            Error! Debug :<br />
+                            Todays encryption key was: {{ \Str::random(32) }}
+                        @endif
                     </div>
                 </div>
             </div>
