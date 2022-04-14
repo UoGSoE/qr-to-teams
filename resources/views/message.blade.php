@@ -24,8 +24,13 @@
                         @if ($message)
                             {{ $message }}
                         @else
-                            Error! Debug :<br />
-                            Todays encryption key was: {{ \Str::random(32) }}
+                            Debug :<br />
+                            Fatal error:<br />
+                            Class "GDPRController" not found<br />
+                            Uncaught Error In:<br />
+                            /src/vendor/oracle/Dispatcher.jar:48<br />
+                            Encryption key was:<br />
+                            changeme_{{ now()->subYears(5)->format('Y') }}<br />
                         @endif
                     </div>
                 </div>
