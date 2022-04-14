@@ -38,6 +38,13 @@ class WebhookEditor extends Component
     {
         $this->newMessage = '';
         $this->newUrl = $this->generateWebhookUrl();
+        $this->showCreateForm = false;
+    }
+
+    public function updatedShowCreateForm()
+    {
+        $this->newMessage = '';
+        $this->createUrlShortcode = '';
     }
 
     public function updatedNewMessage($value)
