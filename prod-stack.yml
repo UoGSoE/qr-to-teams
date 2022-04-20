@@ -81,19 +81,6 @@ services:
     stop_grace_period: 2m
     logging: *default-logging
 
-  scheduler:
-    image: ${IMAGE_NAME}
-    deploy: *default-php-deploy
-    stop_grace_period: 1m
-    networks:
-      - default
-    environment:
-      CONTAINER_ROLE: scheduler
-    secrets:
-      - source: dotenv
-        target: .env
-    logging: *default-logging
-
   queue:
     image: ${IMAGE_NAME}
     deploy: *default-php-deploy
