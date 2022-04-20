@@ -31,7 +31,6 @@ services:
     depends_on:
       - redis
       - mysql
-      - mailhog
     networks:
       - proxy
       - private
@@ -52,20 +51,6 @@ services:
         - "traefik.http.routers.${TRAEFIK_BACKEND}-secured.rule=Host(`${TRAEFIK_HOSTNAME}`)"
         - "traefik.http.routers.${TRAEFIK_BACKEND}-secured.entrypoints=web-secured"
         - "traefik.http.routers.${TRAEFIK_BACKEND}-secured.tls.certresolver=mytlschallenge"
-
-  scheduler:
-    image: ${IMAGE_NAME}
-    logging: *default-logging
-    deploy: *default-deploy
-    environment:
-      CONTAINER_ROLE: scheduler
-    depends_on:
-      - app
-    networks:
-      - private
-    secrets:
-      - source: dotenv
-        target: .env
 
   queue:
     image: ${IMAGE_NAME}
@@ -118,25 +103,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: homestead
       MYSQL_PASSWORD: secret
-
-  mailhog:
-    image: mailhog/mailhog
-    deploy:
-      labels:
-        # note: this assumes traefik v2
-        - "traefik.enable=true"
-        - "traefik.http.routers.mailhog-${TRAEFIK_BACKEND}.rule=Host(`mail-${TRAEFIK_HOSTNAME}`)"
-        - "traefik.http.routers.mailhog-${TRAEFIK_BACKEND}.entrypoints=web"
-        - "traefik.http.services.mailhog-${TRAEFIK_BACKEND}.loadbalancer.server.port=8025" # it seems you always need to give traefik a port so it 'notices' the service
-        - "traefik.http.routers.mailhog-${TRAEFIK_BACKEND}-secured.rule=Host(`mail-${TRAEFIK_HOSTNAME}`)"
-        - "traefik.http.routers.mailhog-${TRAEFIK_BACKEND}-secured.entrypoints=web-secured"
-        - "traefik.http.routers.mailhog-${TRAEFIK_BACKEND}-secured.tls.certresolver=mytlschallenge"
-    expose:
-      - "8025"
-    networks:
-      proxy:
-        private:
-          aliases: ["mailhog.service"]
 
 volumes:
   redis:
