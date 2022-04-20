@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.10",
         "ohffs/laravel-msteams-alerts": "1.1.1",
+        "sentry/sentry-laravel": "^2.12",
         "simplesoftwareio/simple-qrcode": "~4",
         "uogsoe/ldap-laravel": "^3.0",
         "vinkla/hashids": "^10.0"
