@@ -59,6 +59,12 @@ class OutgoingWebhookController extends Controller
             ]);
         }
 
+        // if there is a querystring parameter of `form=1` then we redirect them to a form so they can
+        // supply thier own message
+        if ($request->filled('form')) {
+            return redirect()->route('form', ['btext' => base64_encode($message), 'c' => $webhook->shortcode]);
+        }
+
         MSTeamsAlert::to($webhook->url)->message($message);
 
         $webhook->registerCalled();

@@ -86,4 +86,25 @@ class AdminTest extends TestCase
             'id' => $hook2->id,
         ]);
     }
+
+    /** @test */
+    public function users_can_create_a_new_callable_url_to_hit_a_specific_webhook()
+    {
+        $hook = Webhook::factory()->create(['url' => 'https://example.com/new-hook', 'shortcode' => 'abc123']);
+        $user = User::factory()->create();
+
+        Livewire::actingAs($user)->test('webhook-editor')
+            ->assertSee($hook->url)
+            ->assertDontSee('Text of message to send')
+            ->set('createUrlShortcode', 'abc123')
+            ->assertSee('Text of message to send')
+            ->set('newMessage', 'Hello World')
+            ->assertSee(route('api.help', [
+                'c' => 'abc123',
+                'etext' => '', // etext is encrypted so value will be random(ish) - just check it's in the query string
+            ]))
+            ->assertDontSee('&form=1')
+            ->set('newForm', 1)
+            ->assertSee('&form=1');
+    }
 }

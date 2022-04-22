@@ -4,7 +4,10 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\Webhook;
+use Ohffs\Ldap\LdapUser;
+use Ohffs\Ldap\FakeLdapConnection;
 use Illuminate\Support\Facades\Bus;
+use Ohffs\Ldap\LdapConnectionInterface;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Ohffs\MSTeamsAlerts\Jobs\SendToMSTeamsChannelJob;
@@ -59,6 +62,53 @@ class ApiTest extends TestCase
     }
 
     /** @test */
+    public function a_webhook_can_direct_the_user_to_a_form_for_entering_their_details()
+    {
+        Bus::fake();
+        $this->freezeTime();
+        $webhook = Webhook::factory()->create([
+            'url' => 'https://example.com/webhook/1234',
+        ]);
+
+        $response = $this->get('/api/help?form=1&btext=' . base64_encode('test') . '&c=' . $webhook->shortcode);
+
+        $response->assertRedirect(route('form') . '?btext=' . urlencode(base64_encode('test')) . '&c=' . $webhook->shortcode);
+    }
+
+    /** @test */
+    public function submitting_the_form_with_valid_details_redirects_to_the_webhook_endpoint()
+    {
+        Bus::fake();
+        $this->freezeTime();
+        $this->fakeLdapConnection();
+        \Ldap::shouldReceive('authenticate')->with('validuser', 'validpassword')->andReturn(true);
+        \Ldap::shouldReceive('findUser')->with('validuser')->andReturn(new LdapUser([
+            [
+            'uid' => ['test1x'],
+            'mail' => ['testy@example.com'],
+            'sn' => ['mctesty'],
+            'givenname' => ['testy'],
+            'telephonenumber' => ['12345'],
+            ],
+        ]));
+        $webhook = Webhook::factory()->create([
+            'url' => 'https://example.com/webhook/1234',
+        ]);
+
+        $response = $this->post(route('form.submit', [
+            'username' => 'validuser',
+            'password' => 'validpassword',
+            'message' => 'test message',
+            'c' => $webhook->shortcode,
+        ]));
+
+        $response->assertRedirectContains(route('api.help', [
+            'c' => $webhook->shortcode,
+            'etext' => '', // Note: as the text is encrypted it changes randomly every run, so just checking the param is in the query string
+        ]));
+    }
+
+    /** @test */
     public function incoming_webhooks_update_the_timestamp_on_the_record_and_update_the_stats()
     {
         Bus::fake();
@@ -106,5 +156,13 @@ class ApiTest extends TestCase
 
         $response->assertRedirect(route('message') . '?message=' . urlencode(base64_encode('Invalid channel - no notification sent.')));
         Bus::assertNotDispatched(SendToMSTeamsChannelJob::class);
+    }
+
+    private function fakeLdapConnection()
+    {
+        $this->instance(
+            LdapConnectionInterface::class,
+            new FakeLdapConnection('up', 'whatever')
+        );
     }
 }

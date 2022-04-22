@@ -21,6 +21,7 @@ class Webhook extends Model
 
     protected $casts = [
         'is_default' => 'boolean',
+        'is_form' => 'boolean',
     ];
 
     public static function createNew(string $url, string $name, bool $isDefault)

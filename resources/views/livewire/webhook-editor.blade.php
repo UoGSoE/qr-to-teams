@@ -43,6 +43,15 @@
                         <input wire:model.debounce.500ms="newMessage" type="text" class="input" name="new_message">
                     </div>
                 </div>
+
+                <div class="field">
+                    <div class="control">
+                    <label class="checkbox">
+                        <input type="checkbox" wire:model="newForm" name="new_form" id="new_form" value="1">
+                        Redirect this via a form so users can edit the message?
+                    </label>
+                    </div>
+                </div>
             </form>
             @if ($newMessage)
                 <div class="level" id="new_url_display_box">

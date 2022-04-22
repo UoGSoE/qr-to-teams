@@ -14,6 +14,7 @@ class WebhookEditor extends Component
     public $isDefault = false;
     public $newMessage = '';
     public $newUrl = '';
+    public $newForm = false;
     public $svgData = '';
     public $createUrlShortcode = '';
     public $newWebhookUrl = '';
@@ -44,10 +45,16 @@ class WebhookEditor extends Component
     public function updatedShowCreateForm()
     {
         $this->newMessage = '';
+        $this->newForm = false;
         $this->createUrlShortcode = '';
     }
 
     public function updatedNewMessage($value)
+    {
+        $this->newUrl = $this->generateWebhookUrl();
+    }
+
+    public function updatedNewForm($value)
     {
         $this->newUrl = $this->generateWebhookUrl();
     }
@@ -64,6 +71,10 @@ class WebhookEditor extends Component
         }
         if (strlen($url) > $maxUrlLength) {
             return 'The URL will be too long';
+        }
+
+        if ($this->newForm) {
+            $url = $url . '&form=1';
         }
 
         $this->resetValidation('url_length');
