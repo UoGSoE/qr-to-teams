@@ -102,6 +102,7 @@ class ApiTest extends TestCase
             'c' => $webhook->shortcode,
         ]));
 
+        $response->assertRedirectQueryParamNotNull('etext');
         $response->assertRedirectContains(route('api.help', [
             'c' => $webhook->shortcode,
             'etext' => '', // Note: as the text is encrypted it changes randomly every run, so just checking the param is in the query string
