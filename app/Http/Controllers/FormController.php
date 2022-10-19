@@ -38,7 +38,8 @@ class FormController extends Controller
         $request->validate([
             'username' => 'required',
             'password' => 'required',
-            'message' => 'required',
+            'original_message' => 'nullable',
+            'message' => 'required_without:original_message',
             'c' => 'required',
         ]);
 
@@ -59,6 +60,9 @@ class FormController extends Controller
         $message .= "Name : {$user->forenames} {$user->surname} \n\n";
         $message .= "Email : {$user->email} \n\n";
         $message .= "Teams Chat : https://teams.microsoft.com/l/chat/0/0?users={$user->email} \n\n";
+        if ($request->filled('original_message')) {
+            $message .= "Original Message : {$request->original_message} \n\n";
+        }
         $message .= "Message : {$request->message}";
 
         return redirect()->route('api.help', [
