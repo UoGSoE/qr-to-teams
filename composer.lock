@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b6d13907412fb947e469918862b2564",
+    "content-hash": "cd38454e262fc79c61c45f4ead3f3d09",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3060,20 +3060,20 @@
         },
         {
             "name": "ohffs/simple-laravel-ldap",
-            "version": "1.3.4",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ohnotnow/simple-ldap.git",
-                "reference": "fccd1497dbd48f257818821348cfa9916cb7f142"
+                "reference": "9bbe11991f8ad491a25e3b3cef873bd273f6df4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ohnotnow/simple-ldap/zipball/fccd1497dbd48f257818821348cfa9916cb7f142",
-                "reference": "fccd1497dbd48f257818821348cfa9916cb7f142",
+                "url": "https://api.github.com/repos/ohnotnow/simple-ldap/zipball/9bbe11991f8ad491a25e3b3cef873bd273f6df4c",
+                "reference": "9bbe11991f8ad491a25e3b3cef873bd273f6df4c",
                 "shasum": ""
             },
             "require-dev": {
-                "orchestra/testbench": "~3.0"
+                "orchestra/testbench": "~7.0"
             },
             "type": "library",
             "extra": {
@@ -3105,9 +3105,9 @@
             "description": "Basic LDAP auser auth/lookup",
             "support": {
                 "issues": "https://github.com/ohnotnow/simple-ldap/issues",
-                "source": "https://github.com/ohnotnow/simple-ldap/tree/1.3.4"
+                "source": "https://github.com/ohnotnow/simple-ldap/tree/2.0.1"
             },
-            "time": "2019-10-30T09:10:00+00:00"
+            "time": "2022-06-10T14:45:20+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -8787,23 +8787,23 @@
         },
         {
             "name": "uogsoe/ldap-laravel",
-            "version": "3.0.1",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/UoGSoE/LaravelLdap.git",
-                "reference": "4b72e7848bd80d7f8360db313e557db78a8c3a23"
+                "reference": "11d94df992bc8781cd5cc8d40e3cc60b90cab459"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/UoGSoE/LaravelLdap/zipball/4b72e7848bd80d7f8360db313e557db78a8c3a23",
-                "reference": "4b72e7848bd80d7f8360db313e557db78a8c3a23",
+                "url": "https://api.github.com/repos/UoGSoE/LaravelLdap/zipball/11d94df992bc8781cd5cc8d40e3cc60b90cab459",
+                "reference": "11d94df992bc8781cd5cc8d40e3cc60b90cab459",
                 "shasum": ""
             },
             "require": {
-                "ohffs/simple-laravel-ldap": "~1.0"
+                "ohffs/simple-laravel-ldap": "~2.0"
             },
             "require-dev": {
-                "orchestra/testbench": "~3.0"
+                "orchestra/testbench": "~7.0"
             },
             "type": "library",
             "extra": {
@@ -8831,9 +8831,9 @@
             "description": "Adds a custom auth provider for our LDAP service",
             "support": {
                 "issues": "https://github.com/UoGSoE/LaravelLdap/issues",
-                "source": "https://github.com/UoGSoE/LaravelLdap/tree/3.0.1"
+                "source": "https://github.com/UoGSoE/LaravelLdap/tree/4.0.0"
             },
-            "time": "2020-10-19T09:41:39+00:00"
+            "time": "2022-06-10T12:25:55+00:00"
         },
         {
             "name": "vinkla/hashids",
