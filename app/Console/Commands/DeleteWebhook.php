@@ -23,10 +23,8 @@ class DeleteWebhook extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         if (! $id = $this->argument('id')) {
             $name = $this->choice(
@@ -39,7 +37,7 @@ class DeleteWebhook extends Command
         $hook = Webhook::findOrFail($id);
         $hook->delete();
 
-        $this->info('Deleted webhook ' . $hook->id . ' : ' . $hook->name);
+        $this->info('Deleted webhook '.$hook->id.' : '.$hook->name);
 
         return 0;
     }

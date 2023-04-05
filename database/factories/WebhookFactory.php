@@ -15,11 +15,11 @@ class WebhookFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'url' => $this->faker->url,
-            'name' => $this->faker->name,
+            'url' => $this->faker->url(),
+            'name' => $this->faker->name(),
             'shortcode' => Webhook::generateShortcode(rand(1, 1000000)),
             'called_count' => rand(1, 50),
         ];
