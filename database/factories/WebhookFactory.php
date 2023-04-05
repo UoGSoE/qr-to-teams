@@ -18,8 +18,8 @@ class WebhookFactory extends Factory
     public function definition()
     {
         return [
-            'url' => $this->faker->url,
-            'name' => $this->faker->name,
+            'url' => $this->faker->url(),
+            'name' => $this->faker->name(),
             'shortcode' => Webhook::generateShortcode(rand(1, 1000000)),
             'called_count' => rand(1, 50),
         ];
