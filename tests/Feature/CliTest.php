@@ -7,7 +7,7 @@ use App\Models\Webhook;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class CliTest extends TestCase
+final class CliTest extends TestCase
 {
     use RefreshDatabase;
 

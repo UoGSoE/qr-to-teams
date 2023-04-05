@@ -12,7 +12,7 @@ use Ohffs\Ldap\LdapConnectionInterface;
 use Ohffs\Ldap\LdapUser;
 use Tests\TestCase;
 
-class UserManagementTest extends TestCase
+final class UserManagementTest extends TestCase
 {
     use RefreshDatabase;
 

@@ -12,7 +12,7 @@ use Ohffs\Ldap\LdapUser;
 use Ohffs\MSTeamsAlerts\Jobs\SendToMSTeamsChannelJob;
 use Tests\TestCase;
 
-class ApiTest extends TestCase
+final class ApiTest extends TestCase
 {
     use RefreshDatabase;
 

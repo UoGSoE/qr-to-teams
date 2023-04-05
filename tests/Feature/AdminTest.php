@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class AdminTest extends TestCase
+final class AdminTest extends TestCase
 {
     use RefreshDatabase;
 
