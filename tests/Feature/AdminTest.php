@@ -13,7 +13,7 @@ class AdminTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function non_users_cant_see_the_homepage_dashboard()
+    public function non_users_cant_see_the_homepage_dashboard(): void
     {
         $user = User::factory()->create();
         $hook1 = Webhook::factory()->create();
@@ -25,7 +25,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    public function users_can_see_see_the_homepage_dashboard()
+    public function users_can_see_see_the_homepage_dashboard(): void
     {
         $user = User::factory()->create();
         $hook1 = Webhook::factory()->create();
@@ -41,7 +41,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    public function users_can_add_a_new_webhook()
+    public function users_can_add_a_new_webhook(): void
     {
         $user = User::factory()->create();
         $hook1 = Webhook::factory()->create();
@@ -65,7 +65,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    public function users_can_delete_an_existing_webhook()
+    public function users_can_delete_an_existing_webhook(): void
     {
         $user = User::factory()->create();
         $hook1 = Webhook::factory()->create();
@@ -87,7 +87,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    public function users_can_create_a_new_callable_url_to_hit_a_specific_webhook()
+    public function users_can_create_a_new_callable_url_to_hit_a_specific_webhook(): void
     {
         $hook = Webhook::factory()->create(['url' => 'https://example.com/new-hook', 'shortcode' => 'abc123']);
         $user = User::factory()->create();

@@ -26,7 +26,7 @@ class CreateWebhook extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         if (! $name = $this->argument('name')) {
             $name = $this->ask('Name?');

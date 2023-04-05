@@ -16,7 +16,7 @@ class ApiTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function an_incoming_request_with_base64_encoded_text_is_resent_as_an_ms_teams_webhook_post()
+    public function an_incoming_request_with_base64_encoded_text_is_resent_as_an_ms_teams_webhook_post(): void
     {
         Bus::fake();
         $base64Text = base64_encode('test base64');
@@ -31,7 +31,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function an_incoming_request_with_encrypted_text_is_resent_as_an_ms_teams_webhook_post()
+    public function an_incoming_request_with_encrypted_text_is_resent_as_an_ms_teams_webhook_post(): void
     {
         Bus::fake();
         $encryptedText = encrypt('test encrypted');
@@ -46,7 +46,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function an_incoming_request_is_resent_to_the_default_ms_teams_webhook_if_a_specific_one_isnt_specified_in_the_query_params()
+    public function an_incoming_request_is_resent_to_the_default_ms_teams_webhook_if_a_specific_one_isnt_specified_in_the_query_params(): void
     {
         Bus::fake();
         $webhook1 = Webhook::factory()->create(['url' => 'https://example.com/webhook/1234', 'is_default' => false]);
@@ -61,7 +61,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function a_webhook_can_direct_the_user_to_a_form_for_entering_their_details()
+    public function a_webhook_can_direct_the_user_to_a_form_for_entering_their_details(): void
     {
         Bus::fake();
         $this->freezeTime();
@@ -75,7 +75,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function submitting_the_form_with_valid_details_redirects_to_the_webhook_endpoint()
+    public function submitting_the_form_with_valid_details_redirects_to_the_webhook_endpoint(): void
     {
         Bus::fake();
         $this->freezeTime();
@@ -109,7 +109,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function incoming_webhooks_update_the_timestamp_on_the_record_and_update_the_stats()
+    public function incoming_webhooks_update_the_timestamp_on_the_record_and_update_the_stats(): void
     {
         Bus::fake();
         $this->freezeTime();
@@ -137,7 +137,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function if_the_querystring_is_missing_text_we_return_an_error()
+    public function if_the_querystring_is_missing_text_we_return_an_error(): void
     {
         Bus::fake();
 
@@ -148,7 +148,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function if_the_querystring_has_an_invalid_webhook_code_we_return_an_error()
+    public function if_the_querystring_has_an_invalid_webhook_code_we_return_an_error(): void
     {
         Bus::fake();
 

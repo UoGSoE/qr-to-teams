@@ -16,7 +16,7 @@ class UserManagementTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function only_authenticated_users_can_see_the_user_management_page()
+    public function only_authenticated_users_can_see_the_user_management_page(): void
     {
         $response = $this->get(route('user.index'));
 
@@ -24,7 +24,7 @@ class UserManagementTest extends TestCase
     }
 
     /** @test */
-    public function existing_users_can_see_the_user_management_page()
+    public function existing_users_can_see_the_user_management_page(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -39,7 +39,7 @@ class UserManagementTest extends TestCase
     }
 
     /** @test */
-    public function users_can_delete_an_existing_user_but_not_themselves()
+    public function users_can_delete_an_existing_user_but_not_themselves(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -57,7 +57,7 @@ class UserManagementTest extends TestCase
     }
 
     /** @test */
-    public function users_can_add_a_new_ldap_user()
+    public function users_can_add_a_new_ldap_user(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -93,7 +93,7 @@ class UserManagementTest extends TestCase
     }
 
     /** @test */
-    public function users_cant_add_a_user_that_doesnt_exist_in_ldap()
+    public function users_cant_add_a_user_that_doesnt_exist_in_ldap(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -117,7 +117,7 @@ class UserManagementTest extends TestCase
     }
 
     /** @test */
-    public function users_cant_add_the_same_user_twice()
+    public function users_cant_add_the_same_user_twice(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create(['username' => 'abc1x']);

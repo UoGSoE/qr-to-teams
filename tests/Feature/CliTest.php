@@ -11,7 +11,7 @@ class CliTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function there_is_an_artisan_command_to_make_a_new_webhook()
+    public function there_is_an_artisan_command_to_make_a_new_webhook(): void
     {
         $this->artisan('webhook:create', [
             'name' => 'Test Webhook',
@@ -28,7 +28,7 @@ class CliTest extends TestCase
     }
 
     /** @test */
-    public function we_can_optionally_pass_a_flag_to_make_the_new_webhook_the_default()
+    public function we_can_optionally_pass_a_flag_to_make_the_new_webhook_the_default(): void
     {
         $existingDefault = Webhook::factory()->create(['is_default' => true]);
 
@@ -49,7 +49,7 @@ class CliTest extends TestCase
     }
 
     /** @test */
-    public function if_we_dont_pass_options_we_are_asked_for_input()
+    public function if_we_dont_pass_options_we_are_asked_for_input(): void
     {
         $this->artisan('webhook:create')
             ->expectsQuestion('Name?', 'Test Webhook')
@@ -66,7 +66,7 @@ class CliTest extends TestCase
     }
 
     /** @test */
-    public function there_is_an_artisan_command_to_list_webhooks()
+    public function there_is_an_artisan_command_to_list_webhooks(): void
     {
         $hook1 = Webhook::factory()->create(['name' => 'Test Webhook One', 'url' => 'https://example.com/webhook/1234']);
         $hook2 = Webhook::factory()->create(['name' => 'Test Webhook Two', 'url' => 'https://example.com/webhook/5678', 'is_default' => true]);
@@ -92,7 +92,7 @@ class CliTest extends TestCase
     }
 
     /** @test */
-    public function there_is_an_artisan_command_to_delete_a_webhook()
+    public function there_is_an_artisan_command_to_delete_a_webhook(): void
     {
         $hook1 = Webhook::factory()->create(['name' => 'Test Webhook One', 'url' => 'https://example.com/webhook/1234']);
         $hook2 = Webhook::factory()->create(['name' => 'Test Webhook Two', 'url' => 'https://example.com/webhook/5678']);
@@ -105,7 +105,7 @@ class CliTest extends TestCase
     }
 
     /** @test */
-    public function if_we_dont_supply_an_id_we_are_asked_to_choose_one()
+    public function if_we_dont_supply_an_id_we_are_asked_to_choose_one(): void
     {
         $hook1 = Webhook::factory()->create(['name' => 'Test Webhook One', 'url' => 'https://example.com/webhook/1234']);
         $hook2 = Webhook::factory()->create(['name' => 'Test Webhook Two', 'url' => 'https://example.com/webhook/5678']);
@@ -118,7 +118,7 @@ class CliTest extends TestCase
     }
 
     /** @test */
-    public function there_is_an_artisan_command_to_set_the_default_webhook()
+    public function there_is_an_artisan_command_to_set_the_default_webhook(): void
     {
         $hook1 = Webhook::factory()->create(['name' => 'Test Webhook One', 'url' => 'https://example.com/webhook/1234']);
         $hook2 = Webhook::factory()->create(['name' => 'Test Webhook Two', 'url' => 'https://example.com/webhook/5678', 'is_default' => true]);
@@ -134,7 +134,7 @@ class CliTest extends TestCase
     }
 
     /** @test */
-    public function if_we_dont_supply_the_id_we_are_asked_for_it()
+    public function if_we_dont_supply_the_id_we_are_asked_for_it(): void
     {
         $hook1 = Webhook::factory()->create(['name' => 'Test Webhook One', 'url' => 'https://example.com/webhook/1234']);
         $hook2 = Webhook::factory()->create(['name' => 'Test Webhook Two', 'url' => 'https://example.com/webhook/5678', 'is_default' => true]);

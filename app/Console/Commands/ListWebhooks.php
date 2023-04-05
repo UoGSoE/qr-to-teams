@@ -26,7 +26,7 @@ class ListWebhooks extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $webhooks = Webhook::orderBy('name')->get();
         $this->table(['ID', 'Name', 'Shortcode', 'URL', 'Default?'], $webhooks->map(function ($webhook) {
