@@ -39,7 +39,7 @@ return [
 
         'main' => [
             'salt' => env('HASHID_SALT', 'your-salt-string'),
-            'length' => '6',
+            'length' => 6,
             // 'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
         ],
 

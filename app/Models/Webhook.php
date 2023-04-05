@@ -45,7 +45,7 @@ class Webhook extends Model
 
     public static function generateShortcode($id)
     {
-        return \Vinkla\Hashids\Facades\Hashids::encode($id);
+        return \Vinkla\Hashids\Facades\Hashids::encode(intval($id));
     }
 
     public function registerCalled()
