@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use App\AcademicSession;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -45,12 +43,12 @@ class LoginController extends Controller
 
         $request->validate([
             'username' => 'required',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         $user = User::where('username', '=', $request->username)->first();
         if (! $user) {
-            info('Attempted login by unauthorised user ' . $request->username);
+            info('Attempted login by unauthorised user '.$request->username);
             throw ValidationException::withMessages([
                 'authentication' => 'You have entered an invalid GUID or password',
             ]);
@@ -83,6 +81,7 @@ class LoginController extends Controller
         if ($user && $user->is_staff) {
             return false;
         }
+
         return preg_match('/^[0-9].+/', $username) === 1;
     }
 }

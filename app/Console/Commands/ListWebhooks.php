@@ -38,6 +38,7 @@ class ListWebhooks extends Command
                 $webhook->is_default ? 'Yes' : 'No',
             ];
         }));
+
         return 0;
     }
 }

@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Webhook;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CliTest extends TestCase
@@ -101,7 +100,7 @@ class CliTest extends TestCase
 
         $this->artisan('webhook:delete', [
             'id' => $hook2->id,
-        ])->expectsOutput('Deleted webhook ' . $hook2->id . ' : Test Webhook Two')
+        ])->expectsOutput('Deleted webhook '.$hook2->id.' : Test Webhook Two')
             ->assertExitCode(0);
     }
 
@@ -114,7 +113,7 @@ class CliTest extends TestCase
 
         $this->artisan('webhook:delete', [
         ])->expectsQuestion('Which Webhook?', $hook2->name)
-        ->expectsOutput('Deleted webhook ' . $hook2->id . ' : Test Webhook Two')
+        ->expectsOutput('Deleted webhook '.$hook2->id.' : Test Webhook Two')
             ->assertExitCode(0);
     }
 
@@ -127,7 +126,7 @@ class CliTest extends TestCase
 
         $this->artisan('webhook:default', [
             'id' => $hook3->id,
-        ])->expectsOutput('Set default webhook to ' . $hook3->id . ' : Test Webhook Three')
+        ])->expectsOutput('Set default webhook to '.$hook3->id.' : Test Webhook Three')
             ->assertExitCode(0);
         $this->assertFalse($hook1->fresh()->is_default);
         $this->assertFalse($hook2->fresh()->is_default);
@@ -143,7 +142,7 @@ class CliTest extends TestCase
 
         $this->artisan('webhook:default', [
         ])->expectsQuestion('Which Webhook?', $hook1->name)
-            ->expectsOutput('Set default webhook to ' . $hook1->id . ' : Test Webhook One')
+            ->expectsOutput('Set default webhook to '.$hook1->id.' : Test Webhook One')
             ->assertExitCode(0);
         $this->assertTrue($hook1->fresh()->is_default);
         $this->assertFalse($hook2->fresh()->is_default);

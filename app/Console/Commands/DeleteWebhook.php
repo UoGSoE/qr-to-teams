@@ -39,7 +39,7 @@ class DeleteWebhook extends Command
         $hook = Webhook::findOrFail($id);
         $hook->delete();
 
-        $this->info('Deleted webhook ' . $hook->id . ' : ' . $hook->name);
+        $this->info('Deleted webhook '.$hook->id.' : '.$hook->name);
 
         return 0;
     }

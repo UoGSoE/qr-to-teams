@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use Livewire\Livewire;
-use Ohffs\Ldap\LdapUser;
 use App\Http\Livewire\UserList;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 use Ohffs\Ldap\FakeLdapConnection;
 use Ohffs\Ldap\LdapConnectionInterface;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Ohffs\Ldap\LdapUser;
+use Tests\TestCase;
 
 class UserManagementTest extends TestCase
 {
@@ -65,11 +64,11 @@ class UserManagementTest extends TestCase
         $this->fakeLdapConnection();
         \Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(new LdapUser([
             [
-            'uid' => ['abc1x'],
-            'mail' => ['abc1x@example.com'],
-            'sn' => ['smith'],
-            'givenname' => ['jenny'],
-            'telephonenumber' => ['12345'],
+                'uid' => ['abc1x'],
+                'mail' => ['abc1x@example.com'],
+                'sn' => ['smith'],
+                'givenname' => ['jenny'],
+                'telephonenumber' => ['12345'],
             ],
         ]));
 
@@ -125,11 +124,11 @@ class UserManagementTest extends TestCase
         $this->fakeLdapConnection();
         \Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(new LdapUser([
             [
-            'uid' => ['abc1x'],
-            'mail' => ['abc1x@example.com'],
-            'sn' => ['smith'],
-            'givenname' => ['jenny'],
-            'telephonenumber' => ['12345'],
+                'uid' => ['abc1x'],
+                'mail' => ['abc1x@example.com'],
+                'sn' => ['smith'],
+                'givenname' => ['jenny'],
+                'telephonenumber' => ['12345'],
             ],
         ]));
 
