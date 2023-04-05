@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use App\Models\Webhook;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -10,7 +11,7 @@ class CliTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function there_is_an_artisan_command_to_make_a_new_webhook(): void
     {
         $this->artisan('webhook:create', [
@@ -27,7 +28,7 @@ class CliTest extends TestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function we_can_optionally_pass_a_flag_to_make_the_new_webhook_the_default(): void
     {
         $existingDefault = Webhook::factory()->create(['is_default' => true]);
@@ -48,7 +49,7 @@ class CliTest extends TestCase
         $this->assertFalse($existingDefault->fresh()->is_default);
     }
 
-    /** @test */
+    #[Test]
     public function if_we_dont_pass_options_we_are_asked_for_input(): void
     {
         $this->artisan('webhook:create')
@@ -65,7 +66,7 @@ class CliTest extends TestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function there_is_an_artisan_command_to_list_webhooks(): void
     {
         $hook1 = Webhook::factory()->create(['name' => 'Test Webhook One', 'url' => 'https://example.com/webhook/1234']);
@@ -91,7 +92,7 @@ class CliTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function there_is_an_artisan_command_to_delete_a_webhook(): void
     {
         $hook1 = Webhook::factory()->create(['name' => 'Test Webhook One', 'url' => 'https://example.com/webhook/1234']);
@@ -104,7 +105,7 @@ class CliTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function if_we_dont_supply_an_id_we_are_asked_to_choose_one(): void
     {
         $hook1 = Webhook::factory()->create(['name' => 'Test Webhook One', 'url' => 'https://example.com/webhook/1234']);
@@ -117,7 +118,7 @@ class CliTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
+    #[Test]
     public function there_is_an_artisan_command_to_set_the_default_webhook(): void
     {
         $hook1 = Webhook::factory()->create(['name' => 'Test Webhook One', 'url' => 'https://example.com/webhook/1234']);
@@ -133,7 +134,7 @@ class CliTest extends TestCase
         $this->assertTrue($hook3->fresh()->is_default);
     }
 
-    /** @test */
+    #[Test]
     public function if_we_dont_supply_the_id_we_are_asked_for_it(): void
     {
         $hook1 = Webhook::factory()->create(['name' => 'Test Webhook One', 'url' => 'https://example.com/webhook/1234']);

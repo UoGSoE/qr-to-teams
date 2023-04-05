@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use App\Models\Webhook;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
@@ -15,7 +16,7 @@ class ApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function an_incoming_request_with_base64_encoded_text_is_resent_as_an_ms_teams_webhook_post(): void
     {
         Bus::fake();
@@ -30,7 +31,7 @@ class ApiTest extends TestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function an_incoming_request_with_encrypted_text_is_resent_as_an_ms_teams_webhook_post(): void
     {
         Bus::fake();
@@ -45,7 +46,7 @@ class ApiTest extends TestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function an_incoming_request_is_resent_to_the_default_ms_teams_webhook_if_a_specific_one_isnt_specified_in_the_query_params(): void
     {
         Bus::fake();
@@ -60,7 +61,7 @@ class ApiTest extends TestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function a_webhook_can_direct_the_user_to_a_form_for_entering_their_details(): void
     {
         Bus::fake();
@@ -74,7 +75,7 @@ class ApiTest extends TestCase
         $response->assertRedirect(route('form').'?btext='.urlencode(base64_encode('test')).'&c='.$webhook->shortcode);
     }
 
-    /** @test */
+    #[Test]
     public function submitting_the_form_with_valid_details_redirects_to_the_webhook_endpoint(): void
     {
         Bus::fake();
@@ -108,7 +109,7 @@ class ApiTest extends TestCase
         ]));
     }
 
-    /** @test */
+    #[Test]
     public function incoming_webhooks_update_the_timestamp_on_the_record_and_update_the_stats(): void
     {
         Bus::fake();
@@ -136,7 +137,7 @@ class ApiTest extends TestCase
         $this->assertEquals(2, $webhook->fresh()->called_count);
     }
 
-    /** @test */
+    #[Test]
     public function if_the_querystring_is_missing_text_we_return_an_error(): void
     {
         Bus::fake();
@@ -147,7 +148,7 @@ class ApiTest extends TestCase
         Bus::assertNotDispatched(SendToMSTeamsChannelJob::class);
     }
 
-    /** @test */
+    #[Test]
     public function if_the_querystring_has_an_invalid_webhook_code_we_return_an_error(): void
     {
         Bus::fake();
