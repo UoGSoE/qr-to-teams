@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\RedirectResponse;
 use App\Models\Webhook;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Ohffs\MSTeamsAlerts\Facades\MSTeamsAlert;
