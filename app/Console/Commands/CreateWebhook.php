@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Webhook;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 
 class CreateWebhook extends Command
@@ -24,10 +23,8 @@ class CreateWebhook extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         if (! $name = $this->argument('name')) {
             $name = $this->ask('Name?');
@@ -40,11 +37,13 @@ class CreateWebhook extends Command
         $existing = Webhook::where('url', $url)->first();
         if ($existing) {
             $this->error('Webhook URL already exists.');
+
             return 1;
         }
         $existing = Webhook::where('name', $name)->first();
         if ($existing) {
             $this->error('Webhook name already exists.');
+
             return 1;
         }
 

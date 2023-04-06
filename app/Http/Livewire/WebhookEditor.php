@@ -3,23 +3,34 @@
 namespace App\Http\Livewire;
 
 use App\Models\Webhook;
-use Livewire\Component;
 use Illuminate\Support\Str;
+use Livewire\Component;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class WebhookEditor extends Component
 {
     public $url = '';
+
     public $name = '';
+
     public $isDefault = false;
+
     public $newMessage = '';
+
     public $newUrl = '';
+
     public $newForm = false;
+
     public $svgData = '';
+
     public $createUrlShortcode = '';
+
     public $newWebhookUrl = '';
+
     public $newWebhookName = '';
+
     public $newWebhookDefault = false;
+
     public $showCreateForm = false;
 
     protected $rules = [
@@ -62,19 +73,19 @@ class WebhookEditor extends Component
     protected function generateWebhookUrl(): string
     {
         $maxUrlLength = 2000;
-        $url = route('api.help') . '?c=' . $this->createUrlShortcode . '&etext=' . encrypt($this->newMessage);
+        $url = route('api.help').'?c='.$this->createUrlShortcode.'&etext='.encrypt($this->newMessage);
         if (strlen($url) > $maxUrlLength) {
-            $url = route('api.help') . '?c=' . $this->createUrlShortcode . '&btext=' . base64_encode($this->newMessage);
+            $url = route('api.help').'?c='.$this->createUrlShortcode.'&btext='.base64_encode($this->newMessage);
         }
         if (strlen($url) > $maxUrlLength) {
-            $url = route('api.help') . '?c=' . $this->createUrlShortcode . '&text=' . urlencode($this->newMessage);
+            $url = route('api.help').'?c='.$this->createUrlShortcode.'&text='.urlencode($this->newMessage);
         }
         if (strlen($url) > $maxUrlLength) {
             return 'The URL will be too long';
         }
 
         if ($this->newForm) {
-            $url = $url . '&form=1';
+            $url = $url.'&form=1';
         }
 
         $this->resetValidation('url_length');
@@ -107,7 +118,7 @@ class WebhookEditor extends Component
     {
         return response()->streamDownload(function () {
             echo QrCode::size(1024)->generate($this->newUrl);
-        }, Str::snake($this->createUrlShortcode . $this->newMessage) . '.svg');
+        }, Str::snake($this->createUrlShortcode.$this->newMessage).'.svg');
     }
 
     public function createWebhook()

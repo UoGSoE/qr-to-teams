@@ -23,10 +23,8 @@ class ListWebhooks extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $webhooks = Webhook::orderBy('name')->get();
         $this->table(['ID', 'Name', 'Shortcode', 'URL', 'Default?'], $webhooks->map(function ($webhook) {
@@ -38,6 +36,7 @@ class ListWebhooks extends Command
                 $webhook->is_default ? 'Yes' : 'No',
             ];
         }));
+
         return 0;
     }
 }

@@ -23,10 +23,8 @@ class DefaultWebhook extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         if (! $id = $this->argument('id')) {
             $name = $this->choice(
@@ -40,7 +38,7 @@ class DefaultWebhook extends Command
         Webhook::where('is_default', true)->update(['is_default' => false]);
         $hook->update(['is_default' => true]);
 
-        $this->info('Set default webhook to ' . $hook->id . ' : ' . $hook->name);
+        $this->info('Set default webhook to '.$hook->id.' : '.$hook->name);
 
         return 0;
     }

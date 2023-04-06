@@ -2,30 +2,30 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use Livewire\Livewire;
-use Ohffs\Ldap\LdapUser;
+use PHPUnit\Framework\Attributes\Test;
 use App\Http\Livewire\UserList;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 use Ohffs\Ldap\FakeLdapConnection;
 use Ohffs\Ldap\LdapConnectionInterface;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Ohffs\Ldap\LdapUser;
+use Tests\TestCase;
 
-class UserManagementTest extends TestCase
+final class UserManagementTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function only_authenticated_users_can_see_the_user_management_page()
+    #[Test]
+    public function only_authenticated_users_can_see_the_user_management_page(): void
     {
         $response = $this->get(route('user.index'));
 
         $response->assertRedirect(route('auth.login'));
     }
 
-    /** @test */
-    public function existing_users_can_see_the_user_management_page()
+    #[Test]
+    public function existing_users_can_see_the_user_management_page(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -39,8 +39,8 @@ class UserManagementTest extends TestCase
         $response->assertSeeLivewire('user-list');
     }
 
-    /** @test */
-    public function users_can_delete_an_existing_user_but_not_themselves()
+    #[Test]
+    public function users_can_delete_an_existing_user_but_not_themselves(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -57,19 +57,19 @@ class UserManagementTest extends TestCase
             ->assertDontSee($user2->username);
     }
 
-    /** @test */
-    public function users_can_add_a_new_ldap_user()
+    #[Test]
+    public function users_can_add_a_new_ldap_user(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
         $this->fakeLdapConnection();
         \Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(new LdapUser([
             [
-            'uid' => ['abc1x'],
-            'mail' => ['abc1x@example.com'],
-            'sn' => ['smith'],
-            'givenname' => ['jenny'],
-            'telephonenumber' => ['12345'],
+                'uid' => ['abc1x'],
+                'mail' => ['abc1x@example.com'],
+                'sn' => ['smith'],
+                'givenname' => ['jenny'],
+                'telephonenumber' => ['12345'],
             ],
         ]));
 
@@ -93,8 +93,8 @@ class UserManagementTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function users_cant_add_a_user_that_doesnt_exist_in_ldap()
+    #[Test]
+    public function users_cant_add_a_user_that_doesnt_exist_in_ldap(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -117,19 +117,19 @@ class UserManagementTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function users_cant_add_the_same_user_twice()
+    #[Test]
+    public function users_cant_add_the_same_user_twice(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create(['username' => 'abc1x']);
         $this->fakeLdapConnection();
         \Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(new LdapUser([
             [
-            'uid' => ['abc1x'],
-            'mail' => ['abc1x@example.com'],
-            'sn' => ['smith'],
-            'givenname' => ['jenny'],
-            'telephonenumber' => ['12345'],
+                'uid' => ['abc1x'],
+                'mail' => ['abc1x@example.com'],
+                'sn' => ['smith'],
+                'givenname' => ['jenny'],
+                'telephonenumber' => ['12345'],
             ],
         ]));
 

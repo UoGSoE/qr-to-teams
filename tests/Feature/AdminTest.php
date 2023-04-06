@@ -2,19 +2,19 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use App\Models\User;
 use App\Models\Webhook;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
+use Tests\TestCase;
 
-class AdminTest extends TestCase
+final class AdminTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function non_users_cant_see_the_homepage_dashboard()
+    #[Test]
+    public function non_users_cant_see_the_homepage_dashboard(): void
     {
         $user = User::factory()->create();
         $hook1 = Webhook::factory()->create();
@@ -25,8 +25,8 @@ class AdminTest extends TestCase
         $response->assertRedirect(route('auth.login'));
     }
 
-    /** @test */
-    public function users_can_see_see_the_homepage_dashboard()
+    #[Test]
+    public function users_can_see_see_the_homepage_dashboard(): void
     {
         $user = User::factory()->create();
         $hook1 = Webhook::factory()->create();
@@ -41,8 +41,8 @@ class AdminTest extends TestCase
         $response->assertSee($hook2->url);
     }
 
-    /** @test */
-    public function users_can_add_a_new_webhook()
+    #[Test]
+    public function users_can_add_a_new_webhook(): void
     {
         $user = User::factory()->create();
         $hook1 = Webhook::factory()->create();
@@ -65,8 +65,8 @@ class AdminTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function users_can_delete_an_existing_webhook()
+    #[Test]
+    public function users_can_delete_an_existing_webhook(): void
     {
         $user = User::factory()->create();
         $hook1 = Webhook::factory()->create();
@@ -87,8 +87,8 @@ class AdminTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function users_can_create_a_new_callable_url_to_hit_a_specific_webhook()
+    #[Test]
+    public function users_can_create_a_new_callable_url_to_hit_a_specific_webhook(): void
     {
         $hook = Webhook::factory()->create(['url' => 'https://example.com/new-hook', 'shortcode' => 'abc123']);
         $user = User::factory()->create();

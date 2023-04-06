@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Webhook extends Model
 {
@@ -37,7 +37,7 @@ class Webhook extends Model
             'shortcode' => Str::random(64),
         ]);
         $webhook->update([
-            'shortcode' => static::generateShortcode($webhook->id)
+            'shortcode' => static::generateShortcode($webhook->id),
         ]);
 
         return $webhook;
@@ -45,7 +45,7 @@ class Webhook extends Model
 
     public static function generateShortcode($id)
     {
-        return \Vinkla\Hashids\Facades\Hashids::encode($id);
+        return \Vinkla\Hashids\Facades\Hashids::encode(intval($id));
     }
 
     public function registerCalled()
