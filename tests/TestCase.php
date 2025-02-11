@@ -30,7 +30,5 @@ abstract class TestCase extends BaseTestCase
         });
     }
 
-    public function assertRedirectQueryParamNotNull($parameterName)
-    {
-    }
+    public function assertRedirectQueryParamNotNull($parameterName) {}
 }

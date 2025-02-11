@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use PHPUnit\Framework\Attributes\Test;
 use App\Models\Webhook;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
@@ -10,6 +9,7 @@ use Ohffs\Ldap\FakeLdapConnection;
 use Ohffs\Ldap\LdapConnectionInterface;
 use Ohffs\Ldap\LdapUser;
 use Ohffs\MSTeamsAlerts\Jobs\SendToMSTeamsChannelJob;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class ApiTest extends TestCase
