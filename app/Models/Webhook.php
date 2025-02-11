@@ -19,10 +19,13 @@ class Webhook extends Model
         'updated_at',
     ];
 
-    protected $casts = [
-        'is_default' => 'boolean',
-        'is_form' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_default' => 'boolean',
+            'is_form' => 'boolean',
+        ];
+    }
 
     public static function createNew(string $url, string $name, bool $isDefault)
     {
