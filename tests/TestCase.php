@@ -7,8 +7,6 @@ use Illuminate\Testing\TestResponse;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -30,7 +28,5 @@ abstract class TestCase extends BaseTestCase
         });
     }
 
-    public function assertRedirectQueryParamNotNull($parameterName)
-    {
-    }
+    public function assertRedirectQueryParamNotNull($parameterName) {}
 }

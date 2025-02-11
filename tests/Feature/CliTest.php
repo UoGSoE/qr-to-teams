@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use PHPUnit\Framework\Attributes\Test;
 use App\Models\Webhook;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class CliTest extends TestCase
@@ -114,7 +114,7 @@ final class CliTest extends TestCase
 
         $this->artisan('webhook:delete', [
         ])->expectsQuestion('Which Webhook?', $hook2->name)
-        ->expectsOutput('Deleted webhook '.$hook2->id.' : Test Webhook Two')
+            ->expectsOutput('Deleted webhook '.$hook2->id.' : Test Webhook Two')
             ->assertExitCode(0);
     }
 

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use PHPUnit\Framework\Attributes\Test;
 use App\Http\Livewire\UserList;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -10,6 +9,7 @@ use Livewire\Livewire;
 use Ohffs\Ldap\FakeLdapConnection;
 use Ohffs\Ldap\LdapConnectionInterface;
 use Ohffs\Ldap\LdapUser;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class UserManagementTest extends TestCase
