@@ -9,8 +9,6 @@ use Ohffs\Ldap\LdapUser;
 use Ohffs\MSTeamsAlerts\Jobs\SendToMSTeamsChannelJob;
 use Tests\TestCase;
 
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 test('an incoming request with base64 encoded text is resent as an ms teams webhook post', function () {
     Bus::fake();

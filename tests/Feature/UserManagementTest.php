@@ -9,8 +9,6 @@ use Ohffs\Ldap\LdapConnectionInterface;
 use Ohffs\Ldap\LdapUser;
 use Tests\TestCase;
 
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 test('only authenticated users can see the user management page', function () {
     $response = $this->get(route('user.index'));
