@@ -1,7 +1,7 @@
 <div wire:poll.1m>
     <div class="field is-expanded">
         <div class="control">
-            <input class="input" type="text" placeholder="Search" wire:model="filter" autofocus>
+            <input class="input" type="text" placeholder="Search" wire:model.live="filter" autofocus>
         </div>
     </div>
     <div class="columns">

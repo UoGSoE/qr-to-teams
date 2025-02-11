@@ -30,7 +30,7 @@
                 <label class="label">Username</label>
                 <div class="field has-addons">
                     <div class="control">
-                        <input wire:model="username" type="text" class="input" name="username" placeholder="Username">
+                        <input wire:model.live="username" type="text" class="input" name="username" placeholder="Username">
                     </div>
                     <div class="control">
                         <button wire:click.prevent="lookupUser" class="button is-info">Lookup</button>
@@ -42,19 +42,19 @@
                 <div class="field">
                     <label class="label">Email</label>
                     <div class="control">
-                        <input wire:model="email" type="text" class="input" name="email" placeholder="Email" disabled>
+                        <input wire:model.live="email" type="text" class="input" name="email" placeholder="Email" disabled>
                     </div>
                 </div>
                 <div class="field">
                     <label class="label">Forenames</label>
                     <div class="control">
-                        <input wire:model="forenames" type="text" class="input" name="forenames" disabled>
+                        <input wire:model.live="forenames" type="text" class="input" name="forenames" disabled>
                     </div>
                 </div>
                 <div class="field">
                     <label class="label">Surname</label>
                     <div class="control">
-                        <input wire:model="surname" type="text" class="input" name="surname" disabled>
+                        <input wire:model.live="surname" type="text" class="input" name="surname" disabled>
                     </div>
                 </div>
                 <div class="field">

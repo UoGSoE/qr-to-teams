@@ -40,14 +40,14 @@
                 <label class="label">Text of message to send</label>
                 <div class="field">
                     <div class="control">
-                        <input wire:model.debounce.500ms="newMessage" type="text" class="input" name="new_message">
+                        <input wire:model.live.debounce.500ms="newMessage" type="text" class="input" name="new_message">
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="control">
                     <label class="checkbox">
-                        <input type="checkbox" wire:model="newForm" name="new_form" id="new_form" value="1">
+                        <input type="checkbox" wire:model.live="newForm" name="new_form" id="new_form" value="1">
                         Redirect this via a form so users can edit the message?
                     </label>
                     </div>
@@ -67,7 +67,7 @@
                         <div class="level-item">
                             <button wire:click.prevent="downloadSvg" class="button is-small">Download QR code</button>
                         </div>
-                        <div class="level-item" x-data="{ url: @entangle('newUrl') }">
+                        <div class="level-item" x-data="{ url: @entangle('newUrl').live }">
                             <button @click="navigator.clipboard.writeText(url).then(() => console.log('worked'), () => console.log('failed'))" class="button is-small">Copy to Clipboard</button>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                 <div class="field">
                     <label class="label">Webhook URL</label>
                     <div class="control">
-                    <input wire:model="newWebhookUrl" class="input" type="text">
+                    <input wire:model.live="newWebhookUrl" class="input" type="text">
                     </div>
                     @error('newWebhookUrl')
                         <p class="help is-danger">{{ $message }}</p>
@@ -100,7 +100,7 @@
                 <div class="field">
                     <label class="label">Webhook Name</label>
                     <div class="control">
-                    <input wire:model="newWebhookName" class="input" type="text">
+                    <input wire:model.live="newWebhookName" class="input" type="text">
                     </div>
                     @error('newWebhookName')
                         <p class="help is-danger">{{ $message }}</p>
@@ -109,7 +109,7 @@
                 <div class="field">
                     <div class="control">
                       <label class="checkbox">
-                        <input type="checkbox" wire:model="newWebhookDefault" value="1">
+                        <input type="checkbox" wire:model.live="newWebhookDefault" value="1">
                         Make this the default webhook?
                       </label>
                     </div>

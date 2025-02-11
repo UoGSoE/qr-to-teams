@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('components.layouts.app')
 @section('content')
 <div class="level">
     <div class="level-left">
