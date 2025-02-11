@@ -7,7 +7,6 @@ use Illuminate\Testing\TestResponse;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
 
     protected function setUp(): void
     {
