@@ -13,12 +13,12 @@ test('there is an artisan command to make a new webhook', function () {
         'url' => 'https://example.com/webhook/1234',
     ])->assertExitCode(0);
 
-    $this->assertEquals(1, Webhook::count());
+    expect(Webhook::count())->toEqual(1);
     tap(Webhook::first(), function ($hook) {
-        $this->assertEquals('Test Webhook', $hook->name);
-        $this->assertEquals('https://example.com/webhook/1234', $hook->url);
+        expect($hook->name)->toEqual('Test Webhook');
+        expect($hook->url)->toEqual('https://example.com/webhook/1234');
         $this->assertNotNull($hook->shortcode);
-        $this->assertFalse($hook->is_default);
+        expect($hook->is_default)->toBeFalse();
     });
 });
 
@@ -31,14 +31,14 @@ test('we can optionally pass a flag to make the new webhook the default', functi
         'default' => 'true',
     ])->assertExitCode(0);
 
-    $this->assertEquals(2, Webhook::count());
+    expect(Webhook::count())->toEqual(2);
     tap(Webhook::where('name', 'Test Webhook')->first(), function ($hook) {
-        $this->assertEquals('Test Webhook', $hook->name);
-        $this->assertEquals('https://example.com/webhook/1234', $hook->url);
+        expect($hook->name)->toEqual('Test Webhook');
+        expect($hook->url)->toEqual('https://example.com/webhook/1234');
         $this->assertNotNull($hook->shortcode);
-        $this->assertTrue($hook->is_default);
+        expect($hook->is_default)->toBeTrue();
     });
-    $this->assertFalse($existingDefault->fresh()->is_default);
+    expect($existingDefault->fresh()->is_default)->toBeFalse();
 });
 
 test('if we dont pass options we are asked for input', function () {
@@ -47,12 +47,12 @@ test('if we dont pass options we are asked for input', function () {
         ->expectsQuestion('URL?', 'https://example.com/webhook/1234')
         ->assertExitCode(0);
 
-    $this->assertEquals(1, Webhook::count());
+    expect(Webhook::count())->toEqual(1);
     tap(Webhook::where('name', 'Test Webhook')->first(), function ($hook) {
-        $this->assertEquals('Test Webhook', $hook->name);
-        $this->assertEquals('https://example.com/webhook/1234', $hook->url);
+        expect($hook->name)->toEqual('Test Webhook');
+        expect($hook->url)->toEqual('https://example.com/webhook/1234');
         $this->assertNotNull($hook->shortcode);
-        $this->assertFalse($hook->is_default);
+        expect($hook->is_default)->toBeFalse();
     });
 });
 
@@ -111,9 +111,9 @@ test('there is an artisan command to set the default webhook', function () {
         'id' => $hook3->id,
     ])->expectsOutput('Set default webhook to '.$hook3->id.' : Test Webhook Three')
         ->assertExitCode(0);
-    $this->assertFalse($hook1->fresh()->is_default);
-    $this->assertFalse($hook2->fresh()->is_default);
-    $this->assertTrue($hook3->fresh()->is_default);
+    expect($hook1->fresh()->is_default)->toBeFalse();
+    expect($hook2->fresh()->is_default)->toBeFalse();
+    expect($hook3->fresh()->is_default)->toBeTrue();
 });
 
 test('if we dont supply the id we are asked for it', function () {
@@ -125,7 +125,7 @@ test('if we dont supply the id we are asked for it', function () {
     ])->expectsQuestion('Which Webhook?', $hook1->name)
         ->expectsOutput('Set default webhook to '.$hook1->id.' : Test Webhook One')
         ->assertExitCode(0);
-    $this->assertTrue($hook1->fresh()->is_default);
-    $this->assertFalse($hook2->fresh()->is_default);
-    $this->assertFalse($hook3->fresh()->is_default);
+    expect($hook1->fresh()->is_default)->toBeTrue();
+    expect($hook2->fresh()->is_default)->toBeFalse();
+    expect($hook3->fresh()->is_default)->toBeFalse();
 });
