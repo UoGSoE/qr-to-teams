@@ -1,14 +1,11 @@
 <?php
 
 use App\Models\Webhook;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Ohffs\Ldap\FakeLdapConnection;
 use Ohffs\Ldap\LdapConnectionInterface;
 use Ohffs\Ldap\LdapUser;
 use Ohffs\MSTeamsAlerts\Jobs\SendToMSTeamsChannelJob;
-use Tests\TestCase;
-
 
 test('an incoming request with base64 encoded text is resent as an ms teams webhook post', function () {
     Bus::fake();

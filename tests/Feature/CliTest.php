@@ -1,9 +1,6 @@
 <?php
 
 use App\Models\Webhook;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
 
 test('there is an artisan command to make a new webhook', function () {
     $this->artisan('webhook:create', [
