@@ -127,7 +127,7 @@ test('users cant add the same user twice', function () {
         ->assertSet('error', 'User already exists')
         ->call('createUser');
 
-    $this->assertEquals(1, User::where('username', '=', 'abc1x')->count());
+    expect(User::where('username', '=', 'abc1x')->count())->toEqual(1);
 });
 
 // Helpers

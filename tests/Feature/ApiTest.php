@@ -100,7 +100,7 @@ test('incoming webhooks update the timestamp on the record and update the stats'
     $this->freezeTime();
     $webhook = Webhook::factory()->create(['url' => 'https://example.com/webhook/1234', 'updated_at' => now()->subDays(3), 'called_count' => 0]);
 
-    $this->assertEquals(0, $webhook->fresh()->called_count);
+    expect($webhook->fresh()->called_count)->toEqual(0);
 
     $response = $this->get('/api/help?btext='.base64_encode('test').'&c='.$webhook->shortcode);
 
@@ -108,8 +108,8 @@ test('incoming webhooks update the timestamp on the record and update the stats'
     Bus::assertDispatched(SendToMSTeamsChannelJob::class, function ($job) use ($webhook) {
         return $job->webhookUrl === $webhook->url && $job->text === 'test';
     });
-    $this->assertEquals(now()->format('Y-m-d'), $webhook->fresh()->updated_at->format('Y-m-d'));
-    $this->assertEquals(1, $webhook->fresh()->called_count);
+    expect($webhook->fresh()->updated_at->format('Y-m-d'))->toEqual(now()->format('Y-m-d'));
+    expect($webhook->fresh()->called_count)->toEqual(1);
 
     $response = $this->get('/api/help?btext='.base64_encode('test').'&c='.$webhook->shortcode);
 
@@ -117,8 +117,8 @@ test('incoming webhooks update the timestamp on the record and update the stats'
     Bus::assertDispatched(SendToMSTeamsChannelJob::class, function ($job) use ($webhook) {
         return $job->webhookUrl === $webhook->url && $job->text === 'test';
     });
-    $this->assertEquals(now()->format('Y-m-d'), $webhook->fresh()->updated_at->format('Y-m-d'));
-    $this->assertEquals(2, $webhook->fresh()->called_count);
+    expect($webhook->fresh()->updated_at->format('Y-m-d'))->toEqual(now()->format('Y-m-d'));
+    expect($webhook->fresh()->called_count)->toEqual(2);
 });
 
 test('if the querystring is missing text we return an error', function () {
