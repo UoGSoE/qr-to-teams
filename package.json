@@ -11,8 +11,9 @@
     },
     "devDependencies": {
         "axios": "^1.7.4",
-        "laravel-mix": "^6.0.6",
-        "postcss": "^8.1.14"
+        "postcss": "^8.1.14",
+        "vite": "^3.0.2",
+        "laravel-vite-plugin": "^0.6.0"
     },
     "dependencies": {
         "bulma": "^0.9.3"
