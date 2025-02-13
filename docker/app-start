@@ -50,7 +50,7 @@ elif [ "$role" = "migrations" ]; then
 
 elif [ "$role" = "test" ]; then
 
-    exec gosu www-data php /var/www/html/vendor/bin/phpunit --colors=never
+    exec gosu www-data php /var/www/html/vendor/bin/pest
 
 else
     echo "Could not match the container role \"$role\""
