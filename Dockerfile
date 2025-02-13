@@ -21,6 +21,7 @@ WORKDIR /home/node
 
 RUN mkdir -p /home/node/public/css /home/node/public/js /home/node/resources
 
+COPY --chown=node:node package*.json .babelrc* /home/node/
 COPY --chown=node:node resources/js* /home/node/resources/js
 COPY --chown=node:node resources/sass* /home/node/resources/sass
 COPY --chown=node:node resources/scss* /home/node/resources/scss
