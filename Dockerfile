@@ -28,7 +28,7 @@ COPY --chown=node:node resources/scss* /home/node/resources/scss
 COPY --chown=node:node resources/css* /home/node/resources/css
 
 RUN npm install && \
-    npm run production && \
+    npm run build && \
     npm cache clean --force
 
 
