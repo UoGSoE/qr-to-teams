@@ -2,13 +2,10 @@
 
 use App\Livewire\UserList;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Ohffs\Ldap\FakeLdapConnection;
 use Ohffs\Ldap\LdapConnectionInterface;
 use Ohffs\Ldap\LdapUser;
-use Tests\TestCase;
-
 
 test('only authenticated users can see the user management page', function () {
     $response = $this->get(route('user.index'));

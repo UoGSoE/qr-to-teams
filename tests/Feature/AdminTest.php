@@ -2,10 +2,7 @@
 
 use App\Models\User;
 use App\Models\Webhook;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
-use Tests\TestCase;
-
 
 test('non users cant see the homepage dashboard', function () {
     $user = User::factory()->create();
