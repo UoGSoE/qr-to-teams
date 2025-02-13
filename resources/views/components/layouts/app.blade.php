@@ -6,7 +6,7 @@
 
         <title>QR To Webhook</title>
 
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        @vite('resources/css/app.css')
         @livewireStyles
     </head>
     <body>
@@ -16,6 +16,6 @@
             </div>
         </div>
         @livewireScripts
-        <script src="{{ asset('js/app.js') }}"></script>
+        @vite('resources/js/app.js')
     </body>
 </html>

@@ -13,7 +13,9 @@ services:
     hogfrom:
       - appserver
   node:
-    type: node
+    type: node:22
+    ports:
+      - 3009:3009
     build:
       - npm install
 tooling:
