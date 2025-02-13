@@ -7,6 +7,14 @@ use Ohffs\Ldap\FakeLdapConnection;
 use Ohffs\Ldap\LdapConnectionInterface;
 use Ohffs\Ldap\LdapUser;
 
+beforeEach(function () {
+    // Bind the fake LDAP connection before each test
+    $this->app->instance(
+        LdapConnectionInterface::class,
+        new FakeLdapConnection('up', 'whatever')
+    );
+});
+
 test('only authenticated users can see the user management page', function () {
     $response = $this->get(route('user.index'));
 
@@ -45,7 +53,6 @@ test('users can delete an existing user but not themselves', function () {
 test('users can add a new ldap user', function () {
     $user1 = User::factory()->create();
     $user2 = User::factory()->create();
-    fakeLdapConnection();
     \Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(new LdapUser([
         [
             'uid' => ['abc1x'],
@@ -79,7 +86,6 @@ test('users can add a new ldap user', function () {
 test('users cant add a user that doesnt exist in ldap', function () {
     $user1 = User::factory()->create();
     $user2 = User::factory()->create();
-    fakeLdapConnection();
     \Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(false);
 
     Livewire::actingAs($user1)
@@ -101,7 +107,6 @@ test('users cant add a user that doesnt exist in ldap', function () {
 test('users cant add the same user twice', function () {
     $user1 = User::factory()->create();
     $user2 = User::factory()->create(['username' => 'abc1x']);
-    fakeLdapConnection();
     \Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(new LdapUser([
         [
             'uid' => ['abc1x'],
@@ -124,12 +129,3 @@ test('users cant add the same user twice', function () {
 
     expect(User::where('username', '=', 'abc1x')->count())->toEqual(1);
 });
-
-// Helpers
-function fakeLdapConnection()
-{
-    test()->instance(
-        LdapConnectionInterface::class,
-        new FakeLdapConnection('up', 'whatever')
-    );
-}

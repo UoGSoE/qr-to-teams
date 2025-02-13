@@ -24,8 +24,8 @@
         "fakerphp/faker": "^1.23",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
-        "nunomaduro/collision": "^7.0",
-        "pestphp/pest": "^2.2",
+        "nunomaduro/collision": "^8.0",
+        "pestphp/pest": "^2.36",
         "pestphp/pest-plugin-laravel": "^2.0"
     },
     "autoload": {
@@ -65,7 +65,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "pestphp/pest-plugin": true
         }
     },
     "minimum-stability": "stable",

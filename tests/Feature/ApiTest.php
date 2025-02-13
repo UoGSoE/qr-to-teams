@@ -7,6 +7,14 @@ use Ohffs\Ldap\LdapConnectionInterface;
 use Ohffs\Ldap\LdapUser;
 use Ohffs\MSTeamsAlerts\Jobs\SendToMSTeamsChannelJob;
 
+beforeEach(function () {
+    // Bind the fake LDAP connection before each test
+    $this->app->instance(
+        LdapConnectionInterface::class,
+        new FakeLdapConnection('up', 'whatever')
+    );
+});
+
 test('an incoming request with base64 encoded text is resent as an ms teams webhook post', function () {
     Bus::fake();
     $base64Text = base64_encode('test base64');
@@ -61,7 +69,6 @@ test('a webhook can direct the user to a form for entering their details', funct
 test('submitting the form with valid details redirects to the webhook endpoint', function () {
     Bus::fake();
     $this->freezeTime();
-    fakeLdapConnection();
     \Ldap::shouldReceive('authenticate')->with('validuser', 'validpassword')->andReturn(true);
     \Ldap::shouldReceive('findUser')->with('validuser')->andReturn(new LdapUser([
         [
@@ -133,12 +140,3 @@ test('if the querystring has an invalid webhook code we return an error', functi
     $response->assertRedirect(route('message').'?message='.urlencode(base64_encode('Invalid channel - no notification sent.')));
     Bus::assertNotDispatched(SendToMSTeamsChannelJob::class);
 });
-
-// Helpers
-function fakeLdapConnection()
-{
-    test()->instance(
-        LdapConnectionInterface::class,
-        new FakeLdapConnection('up', 'whatever')
-    );
-}
