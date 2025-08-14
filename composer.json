@@ -12,11 +12,13 @@
         "laravel/framework": "^11.41",
         "laravel/horizon": "^5.22",
         "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.23",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.3",
         "ohffs/laravel-msteams-alerts": "^1.2.1",
         "sentry/sentry-laravel": "^4.3",
         "simplesoftwareio/simple-qrcode": "~4",
+        "socialiteproviders/keycloak": "^5.3",
         "uogsoe/ldap-laravel": "^3.0",
         "vinkla/hashids": "^12.0"
     },
