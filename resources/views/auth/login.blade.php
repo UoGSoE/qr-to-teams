@@ -1,5 +1,4 @@
-@extends('components.layouts.app')
-@section('content')
+<x-layouts.app>
 <div class="loginbox">
             <div class="columns is-centered">
 
@@ -49,4 +48,4 @@
             </div>
         </div><!-- loginbox -->
     </div>
-@endsection
+</x-layouts.app>
