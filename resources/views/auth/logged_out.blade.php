@@ -1,17 +1,9 @@
-@extends('components.layouts.app')
-@section('content')
-<div class="loginbox">
-            <div class="columns is-centered">
-
-                <div class="column is-one-third box">
-
-                    <div class="shadow-lg login-form">
-                        <div class="login-header">
-                            <h1 class="title is-1">You are logged out!</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div><!-- loginbox -->
+<x-layouts.app>
+<div class="min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md">
+        <flux:card class="text-center">
+            <flux:heading size="xl">You are logged out!</flux:heading>
+        </flux:card>
     </div>
-@endsection
+</div>
+</x-layouts.app>
