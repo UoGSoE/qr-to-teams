@@ -15,31 +15,35 @@
                         </article>
                         @enderror
 
-                        <form key="2" method="POST" action="{{ route('auth.do_login') }}" class=" p-8 ">
-                            @csrf
-                            <div class="field">
-                                <label class="label">Username</label>
-                                <p class="control">
-                                    <input class="input" type="text" name="username" required autofocus>
-                                </p>
-                                @error('username')
-                                <p class="help is-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
+                        @if (config('sso.enabled', true))
+                            <a href="{{ route('login.sso') }}" class="button is-info is-fullwidth">Login with SSO</a>
+                        @else
+                            <form key="2" method="POST" action="{{ route('login.local') }}" class=" p-8 ">
+                                @csrf
                                 <div class="field">
-                                    <label class="label">Password</label>
+                                    <label class="label">Username</label>
                                     <p class="control">
-                                        <input class="input" type="password" name="password" required>
+                                        <input class="input" type="text" name="username" required autofocus>
                                     </p>
-                                    @error('password')
+                                    @error('username')
                                     <p class="help is-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            <hr />
-                            <div class="field">
-                                <button class="button is-info is-fullwidth">Log In</button>
-                            </div>
-                        </form>
+                                    <div class="field">
+                                        <label class="label">Password</label>
+                                        <p class="control">
+                                            <input class="input" type="password" name="password" required>
+                                        </p>
+                                        @error('password')
+                                        <p class="help is-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                <hr />
+                                <div class="field">
+                                    <button class="button is-info is-fullwidth">Log In</button>
+                                </div>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>
