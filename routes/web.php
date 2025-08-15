@@ -37,9 +37,6 @@ Route::post('/logout', [\App\Http\Controllers\Auth\SSOController::class, 'logout
 Route::get('/logged-out', [\App\Http\Controllers\Auth\SSOController::class, 'loggedOut'])->name('logged_out');
 
 
-// Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login'])->name('auth.login');
-// Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'doLogin'])->name('auth.do_login');
-// Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('auth.logout');
 Route::get('/form', [\App\Http\Controllers\FormController::class, 'create'])->name('form')->middleware('throttle:10,1');
 Route::post('/form', [\App\Http\Controllers\FormController::class, 'store'])->name('form.submit')->middleware('throttle:10,1');
 

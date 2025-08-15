@@ -18,7 +18,7 @@ beforeEach(function () {
 test('only authenticated users can see the user management page', function () {
     $response = $this->get(route('user.index'));
 
-    $response->assertRedirect(route('auth.login'));
+    $response->assertRedirect(route('login'));
 });
 
 test('existing users can see the user management page', function () {

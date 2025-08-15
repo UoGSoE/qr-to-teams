@@ -11,7 +11,7 @@ test('non users cant see the homepage dashboard', function () {
 
     $response = $this->get(route('dashboard'));
 
-    $response->assertRedirect(route('auth.login'));
+    $response->assertRedirect(route('login'));
 });
 
 test('users can see see the homepage dashboard', function () {
