@@ -2,45 +2,52 @@
 @section('title', 'IT Support - QR Form')
 @section('content')
 
-<p class="box">
-    Only use this utility if you require URGENT/IMMEDIATE assistance with IT issues at your current location.  For other issues
-    please create a <a href="https://www.gla.ac.uk/selfservice">support ticket</a> or visit
-    the <a href="https://wiki.eng.gla.ac.uk/general/index.php?title=TechBar">TechBar</a>.
-</p>
+<flux:card class="mb-6">
+    <flux:text>
+        Only use this utility if you require URGENT/IMMEDIATE assistance with IT issues at your current location. For other issues
+        please create a <flux:button href="https://www.gla.ac.uk/selfservice" variant="ghost" class="underline">support ticket</flux:button> or visit
+        the <flux:button href="https://wiki.eng.gla.ac.uk/general/index.php?title=TechBar" variant="ghost" class="underline">TechBar</flux:button>.
+    </flux:text>
+</flux:card>
 
-<form action="" method="post" class="box">
-    @csrf
-    <input type="hidden" name="c" value="{{ request()->input('c') }}">
-    <div class="field">
-        <label for="name" class="label">Username (GUID)</label>
-        <div class="control">
-            <input type="text" name="username" required value="" id="name" class="input">
-        </div>
-    </div>
-    <div class="field">
-        <label for="password" class="label">Password</label>
-        <div class="control">
-            <input type="password" name="password" required value="" id="password" class="input">
-        </div>
-    </div>
-    <div class="field">
-        <label for="message" class="label">Message</label>
-        <article class="message">
-            <div class="message-body">
-                {{ $message }}
-            </div>
-        </article>
-        <div class="control">
+<flux:card>
+    <form action="" method="post" class="space-y-4">
+        @csrf
+        <input type="hidden" name="c" value="{{ request()->input('c') }}">
+        
+        <flux:input
+            label="Username (GUID)"
+            name="username"
+            type="text"
+            required
+            id="name"
+        />
+        
+        <flux:input
+            label="Password"
+            name="password"
+            type="password"
+            required
+            id="password"
+        />
+        
+        <flux:field>
+            <flux:label>Message</flux:label>
+            <flux:card class="mb-2 bg-blue-50">
+                <flux:text>{{ $message }}</flux:text>
+            </flux:card>
             <input type="hidden" name="original_message" value="{{ $message }}">
-            <textarea name="message" id="message" cols="30" rows="10" class="textarea" placeholder="Add additional message..."></textarea>
-        </div>
-    </div>
-    <div class="field">
-        <div class="control">
-            <button type="submit" class="button is-info is-fullwidth">
-                Send
-            </button>
-        </div>
-    </div>
-</form>
+            <flux:textarea
+                name="message"
+                id="message"
+                rows="10"
+                placeholder="Add additional message..."
+            />
+        </flux:field>
+        
+        <flux:button type="submit" variant="primary" class="w-full">
+            Send
+        </flux:button>
+    </form>
+</flux:card>
 @endsection

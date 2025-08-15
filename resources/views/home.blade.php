@@ -1,6 +1,5 @@
-@extends('layouts.app')
-@section('content')
+<x-layouts.app>
 <div>
     @livewire('webhook-editor')
 </div>
-@endsection
+</x-layouts.app>

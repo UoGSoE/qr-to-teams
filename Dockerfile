@@ -1,5 +1,6 @@
+# syntax=docker/dockerfile:1.4
 ### PHP version we are targetting
-ARG PHP_VERSION=7.4
+ARG PHP_VERSION=8.2
 
 
 ### Placeholder for basic dev stage for use with docker-compose
@@ -8,29 +9,6 @@ FROM uogsoe/soe-php-apache:${PHP_VERSION} as dev
 COPY docker/app-start docker/app-healthcheck /usr/local/bin/
 RUN chmod u+x /usr/local/bin/app-start /usr/local/bin/app-healthcheck
 CMD ["tini", "--", "/usr/local/bin/app-start"]
-
-
-### Build JS/css assets
-FROM node:14 as frontend
-
-# workaround for mix.version() webpack bug
-RUN ln -s /home/node/public /public
-
-USER node
-WORKDIR /home/node
-
-RUN mkdir -p /home/node/public/css /home/node/public/js /home/node/resources
-
-COPY --chown=node:node package*.json webpack.mix.js .babelrc* /home/node/
-COPY --chown=node:node resources/js* /home/node/resources/js
-COPY --chown=node:node resources/sass* /home/node/resources/sass
-COPY --chown=node:node resources/scss* /home/node/resources/scss
-COPY --chown=node:node resources/css* /home/node/resources/css
-
-RUN npm install && \
-    npm run production && \
-    npm cache clean --force
-
 
 ### Prod php dependencies
 FROM dev as prod-composer
@@ -50,23 +28,71 @@ COPY database/factories database/factories
 
 COPY composer.* ./
 
-RUN composer install \
-    --no-interaction \
-    --no-plugins \
-    --no-scripts \
-    --no-dev \
-    --prefer-dist
+USER root
+RUN --mount=type=secret,id=FLUX_USERNAME \
+    --mount=type=secret,id=FLUX_LICENSE_KEY \
+        sh -c ' \
+      export FLUX_USERNAME=$(cat /run/secrets/FLUX_USERNAME) && \
+      export FLUX_LICENSE_KEY=$(cat /run/secrets/FLUX_LICENSE_KEY) && \
+      export COMPOSER_ALLOW_SUPERUSER=1 && \
+      mkdir -p ./composer-auth && \
+      export COMPOSER_HOME="$(pwd)/composer-auth" && \
+      composer config --auth http-basic.composer.fluxui.dev "$FLUX_USERNAME" "$FLUX_LICENSE_KEY" && \
+      composer install \
+        --no-interaction \
+        --no-plugins \
+        --no-scripts \
+        --no-dev \
+        --prefer-dist && \
+      chown -R nobody /var/www/html'
+
 
 ### QA php dependencies
 FROM prod-composer as qa-composer
 ENV APP_ENV=local
 ENV APP_DEBUG=1
 
-RUN composer install \
-    --no-interaction \
-    --no-plugins \
-    --no-scripts \
-    --prefer-dist
+USER root
+RUN --mount=type=secret,id=FLUX_USERNAME \
+    --mount=type=secret,id=FLUX_LICENSE_KEY \
+        sh -c ' \
+      export FLUX_USERNAME=$(cat /run/secrets/FLUX_USERNAME) && \
+      export FLUX_LICENSE_KEY=$(cat /run/secrets/FLUX_LICENSE_KEY) && \
+      export COMPOSER_ALLOW_SUPERUSER=1 && \
+      mkdir -p ./composer-auth && \
+      export COMPOSER_HOME="$(pwd)/composer-auth" && \
+      composer config --auth http-basic.composer.fluxui.dev "$FLUX_USERNAME" "$FLUX_LICENSE_KEY" && \
+      composer install \
+        --no-interaction \
+        --no-plugins \
+        --no-scripts \
+        --prefer-dist && \
+      chown -R nobody /var/www/html'
+
+
+### Build JS/css assets
+FROM node:22.13.1 as frontend
+
+# workaround for mix.version() webpack bug
+RUN ln -s /home/node/public /public
+
+USER node
+WORKDIR /home/node
+
+RUN mkdir -p /home/node/public/css /home/node/public/js /home/node/resources
+
+COPY --chown=node:node package*.json *.js .babelrc* /home/node/
+COPY --chown=node:node resources/js* /home/node/resources/js
+COPY --chown=node:node resources/sass* /home/node/resources/sass
+COPY --chown=node:node resources/scss* /home/node/resources/scss
+COPY --chown=node:node resources/css* /home/node/resources/css
+COPY --chown=node:node resources/views* /home/node/resources/views
+COPY --chown=node:node --from=qa-composer /var/www/html/vendor /home/node/vendor
+
+RUN npm install && \
+    npm run build && \
+    npm cache clean --force
+
 
 ### And build the prod app
 FROM dev as prod
@@ -84,10 +110,8 @@ COPY docker/custom_php.ini /usr/local/etc/php/conf.d/custom_php.ini
 COPY --from=prod-composer /var/www/html/vendor /var/www/html/vendor
 
 #- Copy in our front-end assets
-RUN mkdir -p /var/www/html/public/js /var/www/html/public/css
-COPY --from=frontend /home/node/public/js /var/www/html/public/js
-COPY --from=frontend /home/node/public/css /var/www/html/public/css
-COPY --from=frontend /home/node/mix-manifest.json /var/www/html/mix-manifest.json
+RUN mkdir -p /var/www/html/public/build
+COPY --from=frontend /home/node/public/build /var/www/html/public/build
 
 #- Copy in our code
 COPY . /var/www/html
@@ -102,6 +126,7 @@ RUN if grep -q horizon composer.json; then php /var/www/html/artisan horizon:pub
 RUN ln -sf /run/secrets/.env /var/www/html/.env
 
 #- Clean up and production-cache our apps settings/views/routing
+ENV CACHE_STORE=array
 RUN php /var/www/html/artisan storage:link && \
     php /var/www/html/artisan view:cache && \
     php /var/www/html/artisan route:cache && \
@@ -121,8 +146,5 @@ ENV APP_DEBUG=0
 COPY --from=qa-composer /var/www/html/vendor /var/www/html/vendor
 
 #- Install sensiolabs security scanner and clear the caches
-RUN composer global require enlightn/security-checker && \
-    curl -OL -o /usr/local/bin/phpcs https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar && \
-    php /var/www/html/artisan view:clear && \
-    php /var/www/html/artisan cache:clear
-
+ENV CACHE_STORE=array
+RUN php /var/www/html/artisan optimize:clear

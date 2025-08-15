@@ -60,7 +60,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           target: ci
           build-args: |
-            PHP_VERSION=8.0
+            PHP_VERSION=8.2
           tags: |
             localhost:5000/${{ github.event.repository.name }}:qa-${{ github.sha }}
       -
@@ -71,7 +71,7 @@ jobs:
           # password: ${{ secrets.DOCKERHUB_TOKEN }}
           options: "--network host"
           image: localhost:5000/${{ github.event.repository.name }}:qa-${{ github.sha }}
-          run: rm -fv .env && cp -v .env.github .env && php artisan config:clear && CI=1 APP_ENV=testing ./vendor/bin/phpunit -c phpunit.github.xml
+          run: rm -fv .env && cp -v .env.github .env && php artisan config:clear && CI=1 APP_ENV=testing ./vendor/bin/pest --configuration=phpunit.github.xml
       -
         name: Get tag
         id: get_version
@@ -104,7 +104,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           build-args: |
-            PHP_VERSION=8.0
+            PHP_VERSION=8.2
           tags: |
             uogsoe/${{ github.event.repository.name }}:prod-${{ github.sha }}
       -
@@ -120,7 +120,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           build-args: |
-            PHP_VERSION=8.0
+            PHP_VERSION=8.2
           tags: |
             docker.io/uogsoe/${{ github.event.repository.name }}:${{ steps.get_version.outputs.VERSION }}
       -

@@ -1,65 +1,85 @@
 <div wire:poll.1m>
-    <div class="field is-expanded">
-        <div class="control">
-            <input class="input" type="text" placeholder="Search" wire:model="filter" autofocus>
-        </div>
+    <div class="max-w-md mb-6">
+        <flux:input
+            type="text"
+            placeholder="Search"
+            wire:model.live="filter"
+            icon="magnifying-glass"
+            autofocus
+        />
     </div>
-    <div class="columns">
-        <div class="column">
-            <ul>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div>
+            <div class="space-y-6">
                 @foreach ($servers as $server)
-                    <li id="server-row-{{ $server->id }}">
-                        <div class="level">
-                            <div class="level-left">
-                                <div class="level-item">
-                                    <h2 class="title is-4">
-                                        <a href="{{ $server->wiki_link }}">{{ $server->name }}</a>
-                                    </h2>
-                                </div>
-                                <div class="level-item">
-                                    @if ($server->hasNotes())
-                                        <button wire:click.prevent="setCurrentNotesServer({{ $server->id }})" class="button is-small">Notes</button>
-                                    @endif
-                                </div>
+                    <div id="server-row-{{ $server->id }}">
+                        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                            <div class="flex items-center gap-4">
+                                <flux:heading size="md">
+                                    <flux:button href="{{ $server->wiki_link }}" variant="ghost" size="sm">{{ $server->name }}</flux:button>
+                                </flux:heading>
+                                @if ($server->hasNotes())
+                                    <flux:button
+                                        wire:click="setCurrentNotesServer({{ $server->id }})"
+                                        variant="subtle"
+                                        size="sm"
+                                    >
+                                        Notes
+                                    </flux:button>
+                                @endif
                             </div>
-                            <div class="level-right">
-                                <div class="level-item">
-                                    <button wire:click.prevent="deleteServer({{ $server->id }})" class="button is-danger is-outlined is-small">Delete</button>
-                                </div>
-                            </div>
+                            <flux:button
+                                wire:click="deleteServer({{ $server->id }})"
+                                icon="trash"
+                                variant="danger"
+                                size="sm"
+                                inset="top bottom"
+                            />
                         </div>
-                        <table class="table is-fullwidth is-hoverable" style="margin-bottom: 1rem;">
-                            <tbody>
+                        <flux:table class="mb-4">
+                            <flux:table.rows>
                                 @foreach ($server->guests as $guest)
-                                    <tr id="guest-row-{{ $guest->id }}">
-                                        <td width="50%">
-                                            <a href="{{ $guest->wiki_link }}">{{ $guest->name }}</a>
-                                        </td>
-                                        <td class="@if ($guest->updated_at->isBefore(now()->subWeek())) has-text-danger @endif">
+                                    <flux:table.row id="guest-row-{{ $guest->id }}">
+                                        <flux:table.cell class="w-1/2">
+                                            <flux:button href="{{ $guest->wiki_link }}" variant="ghost" size="sm">{{ $guest->name }}</flux:button>
+                                        </flux:table.cell>
+                                        <flux:table.cell class="@if ($guest->updated_at->isBefore(now()->subWeek())) text-red-600 @endif">
                                             {{ $guest->updated_at->format('d/m/Y H:i') }}
-                                        </td>
-                                        <td>
+                                        </flux:table.cell>
+                                        <flux:table.cell>
                                             @if ($guest->hasNotes())
-                                                <button wire:click.prevent="setCurrentNotes({{ $guest->id }})" class="button is-small @if ($guest->notes_filter_match) is-success @endif">Notes</button>
+                                                <flux:button
+                                                    wire:click="setCurrentNotes({{ $guest->id }})"
+                                                    variant="@if ($guest->notes_filter_match) primary @else subtle @endif"
+                                                    size="sm"
+                                                >
+                                                    Notes
+                                                </flux:button>
                                             @endif
-                                        </td>
-                                        <td>
-                                            <button wire:click.prevent="deleteGuest({{ $guest->id }})" class="button is-danger is-outlined is-small">Delete</button>
-                                        </td>
-                                    </tr>
+                                        </flux:table.cell>
+                                        <flux:table.cell>
+                                            <flux:button
+                                                wire:click="deleteGuest({{ $guest->id }})"
+                                                icon="trash"
+                                                variant="danger"
+                                                size="sm"
+                                                inset="top bottom"
+                                            />
+                                        </flux:table.cell>
+                                    </flux:table.row>
                                 @endforeach
-                            </tbody>
-                        </table>
-                    </li>
+                            </flux:table.rows>
+                        </flux:table>
+                    </div>
                 @endforeach
-            </ul>
+            </div>
         </div>
-        <div class="column">
+        <div>
             @if ($currentNotes)
-                <div class="box" style="position: sticky; top: 1rem;">
-                    <h4 class="title is-4">Notes for {{ $currentName }}</h4>
-                    <p class="is-family-monospace">{!! $currentNotes !!}</p>
-                </div>
+                <flux:card class="sticky top-4">
+                    <flux:heading size="md" class="mb-4">Notes for {{ $currentName }}</flux:heading>
+                    <flux:text class="font-mono whitespace-pre-wrap">{!! $currentNotes !!}</flux:text>
+                </flux:card>
             @endif
         </div>
     </div>

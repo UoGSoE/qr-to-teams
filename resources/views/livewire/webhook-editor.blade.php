@@ -1,171 +1,164 @@
 <div>
-    <div class="level">
-        <div class="level-left">
-            <div class="level-item">
-                <h1 class="title is-3">QR to Webhook</h1>
-            </div>
-            <div class="level-item">
-                <button
-                    class="button"
-                    wire:click.prevent="$toggle('showCreateForm')"
-                    title="@if ($showCreateForm) Hide @else Show @endif New Webhook Form"
-                    aria-label="@if ($showCreateForm) Hide @else Show @endif New Webhook Form"
-                >
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-4">
+            <flux:heading size="lg">QR to Webhook</flux:heading>
+            <flux:button
+                wire:click.prevent="$toggle('showCreateForm')"
+                variant="ghost"
+                size="sm"
+                title="@if ($showCreateForm) Hide @else Show @endif New Webhook Form"
+                aria-label="@if ($showCreateForm) Hide @else Show @endif New Webhook Form"
+            >
                 @if ($showCreateForm) - @else + @endif
-                </button>
-            </div>
+            </flux:button>
         </div>
-        <div class="level-right">
-            <div class="level-item">
-                <a href="{{ route('user.index') }}" class="button">Manage Users</a>
-            </div>
-            <div class="level-item">
-                @auth
-                    <form method="POST" action="{{ route('auth.logout') }}" class="is-pulled-right">
-                        @csrf
-                        <button class="button">Logout</button>
-                    </form>
-                @endauth
-            </div>
+        <div class="flex items-center gap-4">
+            <flux:button href="{{ route('user.index') }}" variant="subtle">Manage Users</flux:button>
+            @auth
+                <form method="POST" action="{{ route('auth.logout') }}">
+                    @csrf
+                    <flux:button type="submit" variant="ghost">Logout</flux:button>
+                </form>
+            @endauth
         </div>
     </div>
 
-    <hr>
+    <flux:separator class="mb-6" />
 
     @if ($createUrlShortcode)
-        <div class="box">
-            <button class="delete is-pulled-right is-small" wire:click="$set('createUrlShortcode', '')"></button>
-            <form action="" class="pb-4">
+        <flux:card class="mb-6">
+            <div class="flex justify-between items-start mb-4">
+                <flux:heading size="md">Create URL</flux:heading>
+                <flux:button
+                    wire:click="$set('createUrlShortcode', '')"
+                    icon="x-mark"
+                    variant="ghost"
+                    size="sm"
+                    inset="top bottom"
+                />
+            </div>
+            <form action="" class="space-y-4">
                 @csrf
-                <label class="label">Text of message to send</label>
-                <div class="field">
-                    <div class="control">
-                        <input wire:model.debounce.500ms="newMessage" type="text" class="input" name="new_message">
-                    </div>
-                </div>
+                <flux:input
+                    wire:model.live.debounce.500ms="newMessage"
+                    label="Text of message to send"
+                    name="new_message"
+                />
 
-                <div class="field">
-                    <div class="control">
-                    <label class="checkbox">
-                        <input type="checkbox" wire:model="newForm" name="new_form" id="new_form" value="1">
-                        Redirect this via a form so users can edit the message?
-                    </label>
-                    </div>
-                </div>
+                <flux:checkbox
+                    wire:model.live="newForm"
+                    name="new_form"
+                    label="Redirect this via a form so users can edit the message?"
+                />
             </form>
             @if ($newMessage)
-                <div class="level" id="new_url_display_box">
-                    <div class="level-left">
-                        <div class="level-item">
-                            <h4 class="title is-5">
-                                    URL
-                            </h4>
-                        </div>
-                        <div class="level-item">
-                            <a href="{{ $newUrl }}" target="_blank" class="button is-small">Send a test</a>
-                        </div>
-                        <div class="level-item">
-                            <button wire:click.prevent="downloadSvg" class="button is-small">Download QR code</button>
-                        </div>
-                        <div class="level-item" x-data="{ url: @entangle('newUrl') }">
-                            <button @click="navigator.clipboard.writeText(url).then(() => console.log('worked'), () => console.log('failed'))" class="button is-small">Copy to Clipboard</button>
-                        </div>
+                <div class="mt-6" id="new_url_display_box">
+                    <div class="flex flex-wrap items-center gap-4 mb-4">
+                        <flux:heading size="sm">Generated URL</flux:heading>
+                        <flux:button href="{{ $newUrl }}" target="_blank" size="sm" variant="subtle">Send a test</flux:button>
+                        <flux:button wire:click.prevent="downloadSvg" size="sm" variant="subtle">Download QR code</flux:button>
+                        <flux:button
+                            x-data="{ url: @entangle('newUrl').live }"
+                            @click="navigator.clipboard.writeText(url).then(() => console.log('worked'), () => console.log('failed'))"
+                            size="sm"
+                            variant="subtle"
+                        >
+                            Copy to Clipboard
+                        </flux:button>
                     </div>
+                    <flux:input
+                        value="{{ $newUrl }}"
+                        name="new_url_webhook"
+                        readonly
+                    />
                 </div>
-                </h4>
-                <p class="subtitle">
-                    <div class="field">
-                        <div class="control">
-                            <input type="text" class="input" name="new_url_webhook" value="{{ $newUrl }}">
-                        </div>
-                    </div>
-                </p>
             @endif
-        </div>
+        </flux:card>
     @endif
 
     @if ($showCreateForm)
-        <div class="box" wire:key="create-webhook-form">
-            <form action="">
+        <flux:card wire:key="create-webhook-form" class="mb-6">
+            <flux:heading size="md" class="mb-4">Create New Webhook</flux:heading>
+            <form action="" class="space-y-4">
                 @csrf
-                <div class="field">
-                    <label class="label">Webhook URL</label>
-                    <div class="control">
-                    <input wire:model="newWebhookUrl" class="input" type="text">
-                    </div>
-                    @error('newWebhookUrl')
-                        <p class="help is-danger">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="field">
-                    <label class="label">Webhook Name</label>
-                    <div class="control">
-                    <input wire:model="newWebhookName" class="input" type="text">
-                    </div>
-                    @error('newWebhookName')
-                        <p class="help is-danger">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="field">
-                    <div class="control">
-                      <label class="checkbox">
-                        <input type="checkbox" wire:model="newWebhookDefault" value="1">
-                        Make this the default webhook?
-                      </label>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="control">
-                    <button wire:click.prevent="createWebhook" class="button">Add</button>
-                    </div>
-                </div>
+                <flux:input
+                    wire:model.live="newWebhookUrl"
+                    label="Webhook URL"
+                    type="text"
+                />
+                @error('newWebhookUrl')
+                    <flux:text variant="danger" size="sm">{{ $message }}</flux:text>
+                @enderror
+
+                <flux:input
+                    wire:model.live="newWebhookName"
+                    label="Webhook Name"
+                    type="text"
+                />
+                @error('newWebhookName')
+                    <flux:text variant="danger" size="sm">{{ $message }}</flux:text>
+                @enderror
+
+                <flux:checkbox
+                    wire:model.live="newWebhookDefault"
+                    label="Make this the default webhook?"
+                    value="1"
+                />
+
+                <flux:button wire:click.prevent="createWebhook" variant="primary">Add Webhook</flux:button>
             </form>
-        </div>
+        </flux:card>
     @endif
 
-    <table class="table is-fullwidth is-striped is-hoverable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Shortcode</th>
-                <th>URL</th>
-                <th>Created</th>
-                <th>Last Called</th>
-                <th>Calls</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody x-data="{ hoveringId: null }">
+    <flux:table>
+        <flux:table.columns>
+            <flux:table.column>ID</flux:table.column>
+            <flux:table.column>Name</flux:table.column>
+            <flux:table.column>Shortcode</flux:table.column>
+            <flux:table.column>URL</flux:table.column>
+            <flux:table.column>Created</flux:table.column>
+            <flux:table.column>Last Called</flux:table.column>
+            <flux:table.column>Calls</flux:table.column>
+            <flux:table.column></flux:table.column>
+        </flux:table.columns>
+        <flux:table.rows x-data="{ hoveringId: null }">
             @foreach ($webhooks as $hook)
-                <tr id="webhook-row-{{ $hook->id }}">
-                    <td @if ($hook->is_default) class="is-success" title="Default" @endif :class="hoveringId == {{ $hook->id }} ? 'is-danger' : ''">{{ $hook->id }}</td>
-                    <td>
-                        <a href="#"  wire:click.prevent="$set('createUrlShortcode', '{{ $hook->shortcode }}')">
+                <flux:table.row id="webhook-row-{{ $hook->id }}">
+                    <flux:table.cell :class="$hook->is_default ? 'bg-green-50 text-green-800' : ''" :title="$hook->is_default ? 'Default' : ''">{{ $hook->id }}</flux:table.cell>
+                    <flux:table.cell>
+                        <flux:button
+                            wire:click.prevent="$set('createUrlShortcode', '{{ $hook->shortcode }}')"
+                            variant="ghost"
+                            size="sm"
+                        >
                             {{ $hook->name }}
-                        </a>
-                    </td>
-                    <td>{{ $hook->shortcode }}</td>
-                    <td title="{{ $hook->url }}">
-                        <a href="#" x-data="{ expanded: false }" @click="expanded = ! expanded">
-                            <span x-show="expanded">
-                                {{ $hook->url }}
-                            </span>
-                            <span x-show="! expanded">
-                                ...{{ Str::substr($hook->url, -30, 30) }}
-                            </span>
-                        </a>
-                    </td>
-                    <td>{{ $hook->created_at->format('d/m/y H:i') }}</td>
-                    <td>{{ $hook->updated_at->format('d/m/y H:i') }}</td>
-                    <td>{{ $hook->called_count }}</td>
-                    <td>
-                        <button wire:click="deleteWebhook({{ $hook->id }})" class="button is-danger is-small is-outlined" @mouseenter="hoveringId = {{ $hook->id }}" @mouseleave="hoveringId = null">
-                            &times;
-                        </button>
-                    </td>
-                </tr>
+                        </flux:button>
+                    </flux:table.cell>
+                    <flux:table.cell>{{ $hook->shortcode }}</flux:table.cell>
+                    <flux:table.cell title="{{ $hook->url }}">
+                        <div x-data="{ expanded: false }">
+                            <flux:button @click="expanded = ! expanded" variant="ghost" size="sm">
+                                <span x-show="expanded">{{ $hook->url }}</span>
+                                <span x-show="! expanded">...{{ Str::substr($hook->url, -30, 30) }}</span>
+                            </flux:button>
+                        </div>
+                    </flux:table.cell>
+                    <flux:table.cell>{{ $hook->created_at->format('d/m/y H:i') }}</flux:table.cell>
+                    <flux:table.cell>{{ $hook->updated_at->format('d/m/y H:i') }}</flux:table.cell>
+                    <flux:table.cell>{{ $hook->called_count }}</flux:table.cell>
+                    <flux:table.cell>
+                        <flux:button
+                            wire:click="deleteWebhook({{ $hook->id }})"
+                            icon="trash"
+                            variant="danger"
+                            size="sm"
+                            inset="top bottom"
+                            @mouseenter="hoveringId = {{ $hook->id }}"
+                            @mouseleave="hoveringId = null"
+                        />
+                    </flux:table.cell>
+                </flux:table.row>
             @endforeach
-        </tbody>
-    </table>
+        </flux:table.rows>
+    </flux:table>
 </div>

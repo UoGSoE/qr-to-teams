@@ -5,18 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>@yield('title')</title>
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        @vite('resources/css/app.css')
+        @fluxAppearance
     </head>
-    <body>
-        <div class="section">
-            <div class="columns">
-                <div class="column is-three-fifths is-offset-one-fifth">
-                    <div class="has-text-centered">
-                        <img src="/UoG_colour.png" alt="University of Glasgow Logo" style="height: 10vh; object-fit: contain;">
-                    </div>
-                    @yield('content')
-                </div>
+    <body class="min-h-screen bg-white dark:bg-zinc-800">
+        <main class="w-full md:w-3/4 max-w-2xl mx-auto py-8 px-4">
+            <div class="text-center mb-8">
+                <img src="/UoG_colour.png" alt="University of Glasgow Logo" class="h-20 object-contain mx-auto">
             </div>
-        </div>
+            @yield('content')
+        </main>
+        @fluxScripts
     </body>
 </html>

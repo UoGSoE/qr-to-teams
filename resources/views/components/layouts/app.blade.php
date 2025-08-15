@@ -6,16 +6,17 @@
 
         <title>QR To Webhook</title>
 
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        @vite('resources/css/app.css')
         @livewireStyles
+        @fluxAppearance
     </head>
-    <body>
-        <div class="section">
-            <div class="container">
-                @yield('content')
-            </div>
-        </div>
+    <body class="min-h-screen bg-white dark:bg-zinc-800">
+        <main class="w-full md:w-3/4 mx-auto py-8 px-4">
+            {{ $slot }}
+        </main>
+
         @livewireScripts
-        <script src="{{ asset('js/app.js') }}"></script>
+        @vite('resources/js/app.js')
+        @fluxScripts
     </body>
 </html>

@@ -1,48 +1,56 @@
-@extends('layouts.app')
-@section('content')
-<div class="loginbox">
-            <div class="columns is-centered">
-
-                <div class="column is-one-third box">
-
-                    <div class="shadow-lg login-form">
-                        <div class="login-header">
-                            <h1 class="title is-1">QrToTeams Login</h1>
-                        </div>
-                        @error('authentication')
-                        <article style="background: #FF7777; color: white; text-align: center;" class="p-8" v-show="errorMessage">
-                            <b>{{ $message }}</b>
-                        </article>
-                        @enderror
-
-                        <form key="2" method="POST" action="{{ route('auth.do_login') }}" class=" p-8 ">
-                            @csrf
-                            <div class="field">
-                                <label class="label">Username</label>
-                                <p class="control">
-                                    <input class="input" type="text" name="username" required autofocus>
-                                </p>
-                                @error('username')
-                                <p class="help is-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
-                                <div class="field">
-                                    <label class="label">Password</label>
-                                    <p class="control">
-                                        <input class="input" type="password" name="password" required>
-                                    </p>
-                                    @error('password')
-                                    <p class="help is-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            <hr />
-                            <div class="field">
-                                <button class="button is-info is-fullwidth">Log In</button>
-                            </div>
-                        </form>
-                    </div>
+<x-layouts.app>
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="w-full max-w-md">
+            <flux:card>
+                <div class="text-center mb-6">
+                    <flux:heading size="xl">QrToTeams Login</flux:heading>
                 </div>
-            </div>
-        </div><!-- loginbox -->
+                
+                @error('authentication')
+                    <div class="mb-6">
+                        <flux:text variant="danger" class="text-center font-bold p-4 bg-red-100 rounded">
+                            {{ $message }}
+                        </flux:text>
+                    </div>
+                @enderror
+
+                @if (config('sso.enabled', true))
+                    <flux:button href="{{ route('login.sso') }}" variant="primary" class="w-full">
+                        Login with SSO
+                    </flux:button>
+                @else
+                    <form method="POST" action="{{ route('login.local') }}" class="space-y-4">
+                        @csrf
+                        
+                        <flux:input
+                            label="Username"
+                            name="username"
+                            type="text"
+                            required
+                            autofocus
+                        />
+                        @error('username')
+                            <flux:text variant="danger" size="sm">{{ $message }}</flux:text>
+                        @enderror
+                        
+                        <flux:input
+                            label="Password"
+                            name="password"
+                            type="password"
+                            required
+                        />
+                        @error('password')
+                            <flux:text variant="danger" size="sm">{{ $message }}</flux:text>
+                        @enderror
+                        
+                        <flux:separator class="my-4" />
+                        
+                        <flux:button type="submit" variant="primary" class="w-full">
+                            Log In
+                        </flux:button>
+                    </form>
+                @endif
+            </flux:card>
+        </div>
     </div>
-@endsection
+</x-layouts.app>
