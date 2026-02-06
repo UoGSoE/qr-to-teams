@@ -20,6 +20,11 @@ task('build', function () {
     run('cd {{release_path}} && npm install && npm run build');
 });
 
+// Disable migrate for now (no .env on server yet)
+task('artisan:migrate', function () {
+    // disabled
+});
+
 // Hooks
 after('deploy:vendors', 'build');
 after('deploy:failed', 'deploy:unlock');
