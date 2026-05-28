@@ -6,10 +6,10 @@
                 wire:click.prevent="$toggle('showCreateForm')"
                 variant="ghost"
                 size="sm"
-                title="@if ($showCreateForm) Hide @else Show @endif New Webhook Form"
-                aria-label="@if ($showCreateForm) Hide @else Show @endif New Webhook Form"
+                :title="($showCreateForm ? 'Hide' : 'Show') . ' New Webhook Form'"
+                :aria-label="($showCreateForm ? 'Hide' : 'Show') . ' New Webhook Form'"
             >
-                @if ($showCreateForm) - @else + @endif
+                {{ $showCreateForm ? '-' : '+' }}
             </flux:button>
         </div>
         <div class="flex items-center gap-4">
