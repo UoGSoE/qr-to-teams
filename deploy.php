@@ -17,7 +17,7 @@ host('gently.cose.gla.ac.uk')
 
 // Tasks
 task('build', function () {
-    run('cd {{release_path}} && npm install && npm run build');
+    run('cd {{release_path}} && npm ci && npm run build');
 });
 
 // Disable migrate for now (no .env on server yet)
