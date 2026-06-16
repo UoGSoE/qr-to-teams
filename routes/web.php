@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::get('/', [\App\Http\Controllers\MessageController::class, 'show'])->name('message');
 
 // Login routes - shows login page with both local and SSO options
@@ -35,7 +34,6 @@ Route::get('/login/sso', [\App\Http\Controllers\Auth\SSOController::class, 'ssoL
 Route::get('/auth/callback', [\App\Http\Controllers\Auth\SSOController::class, 'handleProviderCallback'])->name('sso.callback');
 Route::post('/logout', [\App\Http\Controllers\Auth\SSOController::class, 'logout'])->name('auth.logout');
 Route::get('/logged-out', [\App\Http\Controllers\Auth\SSOController::class, 'loggedOut'])->name('logged_out');
-
 
 Route::get('/form', [\App\Http\Controllers\FormController::class, 'create'])->name('form')->middleware('throttle:10,1');
 Route::post('/form', [\App\Http\Controllers\FormController::class, 'store'])->name('form.submit')->middleware('throttle:10,1');
