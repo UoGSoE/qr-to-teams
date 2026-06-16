@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Testing\Assert;
 use Illuminate\Testing\TestResponse;
 
 abstract class TestCase extends BaseTestCase
@@ -11,7 +12,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         TestResponse::macro('assertRedirectQueryParamNotNull', function ($parameterName) {
-            \Illuminate\Testing\Assert::assertTrue(
+            Assert::assertTrue(
                 $this->isRedirect(),
                 $this->statusMessageWithDetails('201, 301, 302, 303, 307, 308', $this->getStatusCode()),
             );
@@ -21,8 +22,8 @@ abstract class TestCase extends BaseTestCase
             $parameters = [];
             parse_str($queryString, $parameters);
 
-            \Illuminate\Testing\Assert::assertArrayHasKey($parameterName, $parameters, "Query string does not contain {$parameterName} : {$location}");
-            \Illuminate\Testing\Assert::assertNotNull($parameters[$parameterName], "Query string {$parameterName} is null : {$location}");
+            Assert::assertArrayHasKey($parameterName, $parameters, "Query string does not contain {$parameterName} : {$location}");
+            Assert::assertNotNull($parameters[$parameterName], "Query string {$parameterName} is null : {$location}");
 
             return $this;
         });

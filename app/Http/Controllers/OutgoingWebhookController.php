@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Webhook;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -47,7 +48,7 @@ class OutgoingWebhookController extends Controller
         if ($request->filled('etext')) {
             try {
                 $message = decrypt($request->etext);
-            } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            } catch (DecryptException $e) {
                 return redirect()->route('message', [
                     'message' => base64_encode('Invalid message - no notification sent.'),
                 ]);

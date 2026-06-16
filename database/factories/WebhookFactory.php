@@ -6,7 +6,7 @@ use App\Models\Webhook;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Webhook>
+ * @extends Factory<Webhook>
  */
 class WebhookFactory extends Factory
 {

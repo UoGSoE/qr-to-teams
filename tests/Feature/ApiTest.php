@@ -69,8 +69,8 @@ test('a webhook can direct the user to a form for entering their details', funct
 test('submitting the form with valid details redirects to the webhook endpoint', function () {
     Bus::fake();
     $this->freezeTime();
-    \Ldap::shouldReceive('authenticate')->with('validuser', 'validpassword')->andReturn(true);
-    \Ldap::shouldReceive('findUser')->with('validuser')->andReturn(new LdapUser([
+    Ldap::shouldReceive('authenticate')->with('validuser', 'validpassword')->andReturn(true);
+    Ldap::shouldReceive('findUser')->with('validuser')->andReturn(new LdapUser([
         [
             'uid' => ['test1x'],
             'mail' => ['testy@example.com'],

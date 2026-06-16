@@ -67,7 +67,7 @@ unit-tests:
   - cat .env
   - php vendor/bin/pest --configuration=phpunit.gitlab.xml
   - egrep -r '[^a-zA-Z](dd\(|dump\()' app || exit 0
-  - ./vendor/bin/pint --preset psr12
+  - ./vendor/bin/pint
 
 php-security-scan:
   stage: test

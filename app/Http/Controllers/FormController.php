@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class FormController extends Controller
         if ($request->filled('etext')) {
             try {
                 $message = decrypt($request->etext);
-            } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            } catch (DecryptException $e) {
                 return redirect()->route('message', [
                     'message' => base64_encode('Invalid message - no notification sent.'),
                 ]);

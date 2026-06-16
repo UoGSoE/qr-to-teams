@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\SSOController;
+use App\Http\Controllers\FormController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\MessageController::class, 'show'])->name('message');
+Route::get('/', [MessageController::class, 'show'])->name('message');
 
 // Login routes - shows login page with both local and SSO options
 Route::middleware('guest')->group(function () {
@@ -23,22 +28,22 @@ Route::middleware('guest')->group(function () {
     // });
 
     // This is our own log in page - ideally with an option to log in locally for local/dev - and of course the "Login with SSO" button
-    Route::get('/login', [\App\Http\Controllers\Auth\SSOController::class, 'login'])->name('login');
+    Route::get('/login', [SSOController::class, 'login'])->name('login');
     // Or as a Livewire component if you prefer
     // Route::get('/login', App\Livewire\Login::class)->name('login');
 });
 
 // SSO specific routes
-Route::post('/login', [\App\Http\Controllers\Auth\SSOController::class, 'localLogin'])->name('login.local');
-Route::get('/login/sso', [\App\Http\Controllers\Auth\SSOController::class, 'ssoLogin'])->name('login.sso');
-Route::get('/auth/callback', [\App\Http\Controllers\Auth\SSOController::class, 'handleProviderCallback'])->name('sso.callback');
-Route::post('/logout', [\App\Http\Controllers\Auth\SSOController::class, 'logout'])->name('auth.logout');
-Route::get('/logged-out', [\App\Http\Controllers\Auth\SSOController::class, 'loggedOut'])->name('logged_out');
+Route::post('/login', [SSOController::class, 'localLogin'])->name('login.local');
+Route::get('/login/sso', [SSOController::class, 'ssoLogin'])->name('login.sso');
+Route::get('/auth/callback', [SSOController::class, 'handleProviderCallback'])->name('sso.callback');
+Route::post('/logout', [SSOController::class, 'logout'])->name('auth.logout');
+Route::get('/logged-out', [SSOController::class, 'loggedOut'])->name('logged_out');
 
-Route::get('/form', [\App\Http\Controllers\FormController::class, 'create'])->name('form')->middleware('throttle:10,1');
-Route::post('/form', [\App\Http\Controllers\FormController::class, 'store'])->name('form.submit')->middleware('throttle:10,1');
+Route::get('/form', [FormController::class, 'create'])->name('form')->middleware('throttle:10,1');
+Route::post('/form', [FormController::class, 'store'])->name('form.submit')->middleware('throttle:10,1');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/', [\App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
-    Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('user.index');
+    Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/users', [UserController::class, 'index'])->name('user.index');
 });

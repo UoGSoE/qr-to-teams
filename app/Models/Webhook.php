@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Vinkla\Hashids\Facades\Hashids;
 
 class Webhook extends Model
 {
@@ -48,7 +49,7 @@ class Webhook extends Model
 
     public static function generateShortcode($id)
     {
-        return \Vinkla\Hashids\Facades\Hashids::encode(intval($id));
+        return Hashids::encode(intval($id));
     }
 
     public function registerCalled()
