@@ -127,11 +127,17 @@ RUN if grep -q horizon composer.json; then php /var/www/html/artisan horizon:pub
 #- Symlink the docker secret to the local .env so Laravel can see it
 RUN ln -sf /run/secrets/.env /var/www/html/.env
 
-#- Clean up and production-cache our apps settings/views/routing
+#- Clean up and production-cache our apps settings/views
+#- NB: route:cache is deliberately NOT run here. Livewire v4 bakes a hash
+#- derived from APP_KEY into the route table at route-registration time, and
+#- APP_KEY only exists at runtime (the .env secret is symlinked above, but the
+#- secret isn't mounted during the build). Caching routes here bakes in a hash
+#- built from an empty APP_KEY, which 404s every Livewire endpoint in prod.
+#- route:cache now runs at container start in docker/app-start, beside
+#- config:cache (which is already env-dependent for the same reason).
 ENV CACHE_STORE=array
 RUN php /var/www/html/artisan storage:link && \
     php /var/www/html/artisan view:cache && \
-    php /var/www/html/artisan route:cache && \
     chown -R www-data:www-data storage bootstrap/cache
 
 #- Set up the default healthcheck

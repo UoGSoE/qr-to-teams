@@ -22,6 +22,10 @@ do
 done
 
 php /var/www/html/artisan config:cache
+# route:cache must run here, not at image build: Livewire v4 derives a route
+# hash from APP_KEY, which is only present at runtime. Caching routes at build
+# time (with an empty APP_KEY) 404s every Livewire endpoint. See Dockerfile.
+php /var/www/html/artisan route:cache
 
 if [ "$role" = "app" ]; then
 
