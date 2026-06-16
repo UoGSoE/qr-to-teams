@@ -71,7 +71,9 @@ RUN --mount=type=secret,id=FLUX_USERNAME \
 
 
 ### Build JS/css assets
-FROM node:22.13.1 as frontend
+# node:22.13.1 — pinned 2026-06-16
+# refresh: docker pull node:22.13.1 && docker images --digests | grep node
+FROM node:22.13.1@sha256:5145c882f9e32f07dd7593962045d97f221d57a1b609f5bf7a807eb89deff9d6 as frontend
 
 # workaround for mix.version() webpack bug
 RUN ln -s /home/node/public /public
@@ -89,7 +91,7 @@ COPY --chown=node:node resources/css* /home/node/resources/css
 COPY --chown=node:node resources/views* /home/node/resources/views
 COPY --chown=node:node --from=qa-composer /var/www/html/vendor /home/node/vendor
 
-RUN npm install && \
+RUN npm ci && \
     npm run build && \
     npm cache clean --force
 

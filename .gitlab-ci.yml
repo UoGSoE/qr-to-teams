@@ -28,6 +28,10 @@ variables:
   LOCAL_QA_IMAGE_NAME: localhost:5000/$CI_PROJECT_PATH:qa-$CI_COMMIT_SHA
   LOCAL_PROD_IMAGE_NAME: localhost:5000/$CI_PROJECT_PATH:prod-$CI_COMMIT_SHA
 
+# docker:28 — pinned 2026-06-16 (replaces deprecated, frozen-since-2020 docker:stable)
+# refresh: docker pull docker:28 && docker images --digests | grep docker
+.docker_image: &docker_image docker:28@sha256:2a232a42256f70d78e3cc5d2b5d6b3276710a0de0596c145f627ecfae90282ac
+
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
 cache:
@@ -77,7 +81,7 @@ php-security-scan:
 
 build-qa-tagged:
   stage: build-qa
-  image: docker:stable
+  image: *docker_image
   script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   - echo $FLUX_USERNAME > FLUX_USERNAME
@@ -87,7 +91,7 @@ build-qa-tagged:
 
 build-prod-tagged:
   stage: build-prod
-  image: docker:stable
+  image: *docker_image
   only:
   - master
   script:
@@ -101,7 +105,7 @@ deploy_to_qa:
   stage: deploy
   when: manual
   environment: qa
-  image: docker:stable
+  image: *docker_image
   script:
   - apk add -qU openssh curl
   - eval $(ssh-agent -s)
@@ -127,7 +131,7 @@ deploy_to_prod:
   only:
   - master
   environment: prod
-  image: docker:stable
+  image: *docker_image
   script:
   - apk add -qU openssh curl
   - eval $(ssh-agent -s)
