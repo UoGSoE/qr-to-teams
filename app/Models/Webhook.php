@@ -24,7 +24,6 @@ class Webhook extends Model
     {
         return [
             'is_default' => 'boolean',
-            'is_form' => 'boolean',
         ];
     }
 

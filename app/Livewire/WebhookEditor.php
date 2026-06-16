@@ -9,12 +9,6 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class WebhookEditor extends Component
 {
-    public $url = '';
-
-    public $name = '';
-
-    public $isDefault = false;
-
     public $newMessage = '';
 
     public $newUrl = '';
@@ -32,12 +26,6 @@ class WebhookEditor extends Component
     public $newWebhookDefault = false;
 
     public $showCreateForm = false;
-
-    protected $rules = [
-        'url' => 'required|url',
-        'name' => 'required|string|max:255|unique:webhooks,name',
-        'isDefault' => 'required|boolean',
-    ];
 
     public function render()
     {
@@ -78,9 +66,6 @@ class WebhookEditor extends Component
             $url = route('api.help').'?c='.$this->createUrlShortcode.'&btext='.base64_encode($this->newMessage);
         }
         if (strlen($url) > $maxUrlLength) {
-            $url = route('api.help').'?c='.$this->createUrlShortcode.'&text='.urlencode($this->newMessage);
-        }
-        if (strlen($url) > $maxUrlLength) {
             return 'The URL will be too long';
         }
 
@@ -91,15 +76,6 @@ class WebhookEditor extends Component
         $this->resetValidation('url_length');
 
         return $url;
-    }
-
-    public function addWebhook()
-    {
-        $this->validate();
-
-        Webhook::createNew($this->url, $this->name, $this->isDefault);
-
-        $this->reset();
     }
 
     public function deleteWebhook($webhookId)

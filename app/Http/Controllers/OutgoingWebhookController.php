@@ -14,8 +14,8 @@ class OutgoingWebhookController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
-            'btext' => 'required_without_all:text,etext',
-            'etext' => 'required_without_all:text,btext',
+            'btext' => 'required_without:etext',
+            'etext' => 'required_without:btext',
         ]);
 
         if ($validator->fails()) {

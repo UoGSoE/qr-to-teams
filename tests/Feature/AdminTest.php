@@ -36,9 +36,9 @@ test('users can add a new webhook', function () {
     Livewire::actingAs($user)->test('webhook-editor')
         ->assertSee($hook1->url)
         ->assertSee($hook2->url)
-        ->set('url', 'https://example.com/new-hook')
-        ->set('name', 'New Hook')
-        ->call('addWebhook')
+        ->set('newWebhookUrl', 'https://example.com/new-hook')
+        ->set('newWebhookName', 'New Hook')
+        ->call('createWebhook')
         ->assertSee($hook1->url)
         ->assertSee($hook2->url)
         ->assertSee('https://example.com/new-hook');

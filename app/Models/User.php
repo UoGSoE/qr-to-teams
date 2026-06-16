@@ -27,6 +27,9 @@ class User extends Authenticatable
         'password',
     ];
 
+    // `is_admin` is deliberately NOT mass-assignable. Promote a user explicitly
+    // via `$user->is_admin = true; $user->save();` behind an authorisation check.
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -46,6 +49,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'is_admin' => 'boolean',
         ];
     }
 }

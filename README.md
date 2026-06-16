@@ -16,9 +16,15 @@ Webhook created - shortcode is 1WRdqm
 ```
 Now if you open a browser and visit :
 ```
-http://localhost:4444/api/help?text=Help&c=1WRdqm
+http://localhost:4444/api/help?btext=SGVscA==&c=1WRdqm
 ```
-You should get a success message and a webhook should be sent to MS Teams.
+(`SGVscA==` is `Help` base64-encoded — see below.)  You should get a success message and a webhook should be sent to MS Teams.
+
+The message is **not** sent as plain text in the URL. You must supply it as one of:
+- `btext` — base64-encoded (e.g. `SGVscA==` for `Help`). Lightly obfuscated, so casual tampering is less obvious.
+- `etext` — encrypted with the app key via Laravel's `encrypt()`. Use this when the message must not be readable or editable from the URL.
+
+The admin UI (and its QR-code generator) builds these `btext`/`etext` URLs for you.
 
 ## Available CLI commands
 ```sh

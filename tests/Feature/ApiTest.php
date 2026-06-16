@@ -135,7 +135,7 @@ test('if the querystring is missing text we return an error', function () {
 test('if the querystring has an invalid webhook code we return an error', function () {
     Bus::fake();
 
-    $response = $this->get('/api/help?text=sdfsdfsfd?c=blah');
+    $response = $this->get('/api/help?btext='.base64_encode('test').'&c=blah');
 
     $response->assertRedirect(route('message').'?message='.urlencode(base64_encode('Invalid channel - no notification sent.')));
     Bus::assertNotDispatched(SendToMSTeamsChannelJob::class);
